@@ -1,0 +1,9 @@
+.today {
+	FONT-WEIGHT: bold; FONT-SIZE: 10pt; COLOR: black; FONT-FAMILY: sans-serif
+}
+.days {
+	FONT-WEIGHT: bold; FONT-SIZE: 10pt; COLOR: navy; FONT-FAMILY: sans-serif; TEXT-ALIGN: center
+}
+.dates {
+	FONT-SIZE: 10pt; COLOR: black; FONT-FAMILY: sans-serif
+}

@@ -1,0 +1,75 @@
+/* 
+    Document   : letter_style
+    Created on : May 21, 2013, 10:44:36 AM
+    Author     : sibashis_chatterjee
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+root { 
+    display: block;
+}
+.bg {
+    width: 21cm;
+    height: 29.7cm;
+    text-align: center;
+}
+.ref {
+    font-family: "times new roman";
+    color: black;
+    text-align: left;
+}
+.dt {
+   font-family: "times new roman";
+    color: black;
+    text-align: right; 
+}
+.letter_to {
+    font-family: "times new roman";
+    color: black;
+    text-align: left;
+}
+.subj {
+    text-align: center;
+    font-weight: bold;
+    font-family: "times new roman";
+    text-decoration: underline;
+}
+
+.tab1 {
+    text-align: center; 
+    font-family: "times new roman";
+}
+.tab_style {
+    border-width: 1px;
+    border-color: black;
+    text-align: center;
+    vertical-align: middle;
+    border-collapse: collapse;
+    position: inherit;
+}
+td.xtd {
+    border-style: solid;
+    border-width: 1px;
+    border-collapse: collapse;
+}
+.body {
+    text-align: left;
+    font-family: "times new roman";
+    color: black;
+}
+.footer {
+    text-align: left;
+    font-family: "times new roman";
+    color: black;
+}
+.tabhead {
+    text-align: left;
+    font-family: "times new roman";
+    color: black;
+}

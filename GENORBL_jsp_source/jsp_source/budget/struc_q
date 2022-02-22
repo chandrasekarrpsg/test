@@ -1,0 +1,288 @@
+           ps1=mk.con.prepareStatement(" SELECT NVL(sl_no_rowval,3.5) SL_NO_ROWVAL,"+
+                                       "        COUNT(*) ROW_SPAN "+
+                                       " FROM BGT_FORM2B_STRUC "+
+                                       " WHERE BGT_FR_YR = ? "+
+                                       " GROUP BY SL_NO_ROWVAL "+
+                                       " ORDER BY SL_NO_ROWVAL ");
+           ps1.setString(1,sBgt_Fr_Year);
+
+           rs1=ps1.executeQuery();
+
+           while(rs1.next()){
+
+                 iGrp_index = iGrp_index + 1;
+
+                 sSl_No_row_val = rs1.getString(1); 
+                 sSl_No_row_span = Integer.toString(rs1.getInt(2)); 
+
+                 sBgt_Hd_Rowval = "";
+                 sBgt_Desc      = "";
+                 sSubt_Mkr      = "";
+                 sTr_Bg_Color   = "";
+                 sBgt_seq       = "";
+                 sAmt_NA_mkr    = "";
+
+                 iGrp_sl_no = 0;
+                 sStrt_Bgt_seq_for_grp    = "";
+                 sEnd_Bgt_seq_for_grp = "";
+
+%>
+<!--
+<script>
+
+     var grp_seq_array = [];
+     g_grp_seq_array1[<%= iGrp_index %> - 1] = new Array(4);
+
+</script>
+-->
+<%
+           
+                 ps2 = mk.con.prepareStatement(" SELECT NVL(SL_NO_ROWVAL,3.5) SL_NO_ROWVAL, "+
+                                               "  NVL(BGT_HD_ROWVAL,' '), "+
+                                               " ' <span style='||CHR(39)||'font-weight:lighter;background-color:#'|| "+
+	                                       "    (SELECT COLOR_HEX  "+
+                                               "            FROM BGT_COLOR  "+
+		            		         "     WHERE COLOR_CD=NVL(DESC1_B_COLOR,1))||'; color:#'|| "+
+	                                       "    (SELECT COLOR_HEX  "+
+                                          	 "            FROM BGT_COLOR  "+
+            				         "     WHERE COLOR_CD=NVL(DESC1_F_COLOR,1))||CHR(39)||'>'||NVL(DESC1,' ')||'</span>'|| "+
+	                                       "  ' <span style='||CHR(39)||'font-weight:lighter;background-color:#'|| "+
+	                                       "    (SELECT COLOR_HEX  "+
+	                                       " 	      FROM BGT_COLOR  "+
+		      	            		 "     WHERE COLOR_CD=NVL(DESC2_B_COLOR,1))||'; color:#'|| "+
+	                                       "    (SELECT COLOR_HEX  "+
+                                          	 "            FROM BGT_COLOR  "+
+			            	         "     WHERE COLOR_CD=NVL(DESC2_F_COLOR,1))||CHR(39)||'>'||NVL(DESC2,' ')||'</span>'|| "+
+	                                       "  ' <span style='||CHR(39)||'font-weight:lighter;background-color:#'|| "+
+	                                       "    (SELECT COLOR_HEX  "+
+                                               "	      FROM BGT_COLOR  "+
+				               "     WHERE COLOR_CD=NVL(DESC3_B_COLOR,1))||'; color:#'|| "+
+	                                       "    (SELECT COLOR_HEX  "+
+                                          	 "            FROM BGT_COLOR  "+
+				               "     WHERE COLOR_CD=NVL(DESC3_F_COLOR,1))||CHR(39)||'>'||NVL(DESC3,' ')||'</span>' Budg_Desc,"+
+                                          	 "  NVL(SUBT_MKR,'NE'),  "+
+                                          	 "  (SELECT COLOR_HEX  "+
+                                               "          FROM BGT_COLOR  "+
+                                               "   WHERE COLOR_CD=NVL(DESC1_B_COLOR,1)) TD_BG_COLOR,  "+
+                                               "   BGT_SEQ,  "+
+                                               "   NVL(TRIM(AMT_NA),'NE'),  "+
+                                               "  DECODE(DESC_JUST,'L','left','R','right','C','center','left')  "+
+	                                       "  FROM BGT_FORM2B_STRUC "+
+                                               "  WHERE BGT_FR_YR= ?  "+
+                                               "  AND NVL(SL_NO_ROWVAL,3.5)= ?  "+
+                                               "  ORDER BY SL_NO_ROWVAL,BGT_HD_ROWORDER "); 
+                                          
+
+                 ps2.setString(1,sBgt_Fr_Year);
+                 ps2.setString(2,sSl_No_row_val);
+
+                 rs2=ps2.executeQuery();
+
+                 while(rs2.next()){
+
+/**** New Code Start ***/
+
+  rows = new ArrayList() ;
+
+rows.add(rs2.getString(1)) ;
+rows.add(rs2.getString(2)) ;
+rows.add(rs2.getString(3)) ;
+rows.add(rs2.getString(4)) ;
+rows.add(rs2.getString(5)) ;
+rows.add(rs2.getString(6)) ;
+rows.add(rs2.getString(7)) ;
+rows.add(rs2.getString(8)) ;
+
+l1.add(rows);
+
+
+/**** New Code End ***/
+                 
+                       iLineNo = iLineNo + 1;
+
+                       iGrp_sl_no = iGrp_sl_no + 1;
+                       sBgt_Hd_Rowval = rs2.getString(2);
+                       sBgt_Desc      = rs2.getString(3);
+                       sSubt_Mkr      = rs2.getString(4);
+                       sTr_Bg_Color   = rs2.getString(5);
+                       sBgt_seq       = rs2.getString(6);
+                       sAmt_NA_mkr    = rs2.getString(7);
+                       sJustMkr       = rs2.getString(8);
+
+                       if(iGrp_sl_no == 1){
+
+                          sStrt_Bgt_seq_for_grp    = sBgt_seq;
+
+%>
+<!--
+<script>
+         g_grp_seq_array1[<%= iGrp_index %> - 1][0] = '<%= iLineNo-1 %>';
+         g_grp_seq_array1[<%= iGrp_index %> - 1][1] = '<%= iLineNo-1 %>';
+</script>
+-->
+<%
+                       }
+
+                       if(sSubt_Mkr.equals("T1")){
+
+%>
+<!--
+<tr style="background-color:<%= sTr_Bg_Color %>">
+                <td colspan= "12" style="width: 48%" class="style2" align="<%= sJustMkr %>">&nbsp;<%= sBgt_Desc %></td>
+-->
+<%
+                       }else{
+
+%>
+<!--
+<tr style="background-color:<%= sTr_Bg_Color %>">
+                <td style="width: 4%" class="style2" align="center">&nbsp;<%= sSl_No_row_val %></td>
+                <td style="width: 4%" class="style2" align="center">&nbsp;<%= sBgt_Hd_Rowval %></td>
+                <td colspan= "10" style="width: 40%" class="style2" align="<%= sJustMkr %>">&nbsp;<%= sBgt_Desc %></td>
+-->
+<%
+
+                      }
+
+%>
+<!--
+		<td style="width: 4%" class="style2">&nbsp;<input  type= "text" class="text_box1" style="color:blue;" size="4" maxlength="10" value="0.00" id = "T_<%= sBgt_seq %>_01" onClick="addBgtSeqforUpd(this.id,'<%= sBgt_seq %>','04','<%= sBgt_Fr_YY %>')" onkeyup="if(window.event.keyCode==13||this.length==10){checkCell('<%= iLineNo-1 %>','00','<%= sBgt_seq %>');}" /></td>
+		<td style="width: 4%" class="style2">&nbsp;<input  type= "text" class="text_box1" style="color:blue;" size="4" maxlength="10" value="0.00" id = "T_<%= sBgt_seq %>_02" onClick="addBgtSeqforUpd(this.id,'<%= sBgt_seq %>','05','<%= sBgt_Fr_YY %>')" onkeyup="if(window.event.keyCode==13||this.length==10){checkCell('<%= iLineNo-1 %>','01','<%= sBgt_seq %>');}" /> </td>
+		<td style="width: 4%" class="style2">&nbsp;<input  type= "text" class="text_box1" style="color:blue;" size="4" maxlength="10" value="0.00" id = "T_<%= sBgt_seq %>_03" onClick="addBgtSeqforUpd(this.id,'<%= sBgt_seq %>','06','<%= sBgt_Fr_YY %>')" onkeyup="if(window.event.keyCode==13||this.length==10){checkCell('<%= iLineNo-1 %>','02','<%= sBgt_seq %>');}" /> </td>
+		<td style="width: 4%" class="style2">&nbsp;<input  type= "text" class="text_box1" style="color:blue;" size="4" maxlength="10" value="0.00" id = "T_<%= sBgt_seq %>_04" onClick="addBgtSeqforUpd(this.id,'<%= sBgt_seq %>','07','<%= sBgt_Fr_YY %>')" onkeyup="if(window.event.keyCode==13||this.length==10){checkCell('<%= iLineNo-1 %>','03','<%= sBgt_seq %>');}" /> </td>
+		<td style="width: 4%" class="style2">&nbsp;<input  type= "text" class="text_box1" style="color:blue;" size="4" maxlength="10" value="0.00" id = "T_<%= sBgt_seq %>_05" onClick="addBgtSeqforUpd(this.id,'<%= sBgt_seq %>','08','<%= sBgt_Fr_YY %>')" onkeyup="if(window.event.keyCode==13||this.length==10){checkCell('<%= iLineNo-1 %>','04','<%= sBgt_seq %>');}" /> </td>
+		<td style="width: 4%" class="style2">&nbsp;<input  type= "text" class="text_box1" style="color:blue;" size="4" maxlength="10" value="0.00" id = "T_<%= sBgt_seq %>_06" onClick="addBgtSeqforUpd(this.id,'<%= sBgt_seq %>','09','<%= sBgt_Fr_YY %>')" onkeyup="if(window.event.keyCode==13||this.length==10){checkCell('<%= iLineNo-1 %>','05','<%= sBgt_seq %>');}" /> </td>
+		<td style="width: 4%" class="style2">&nbsp;<input  type= "text" class="text_box1" style="color:blue;" size="4" maxlength="10" value="0.00" id = "T_<%= sBgt_seq %>_07" onClick="addBgtSeqforUpd(this.id,'<%= sBgt_seq %>','10','<%= sBgt_Fr_YY %>')" onkeyup="if(window.event.keyCode==13||this.length==10){checkCell('<%= iLineNo-1 %>','06','<%= sBgt_seq %>');}" /> </td>
+		<td style="width: 4%" class="style2">&nbsp;<input  type= "text" class="text_box1" style="color:blue;" size="4" maxlength="10" value="0.00" id = "T_<%= sBgt_seq %>_08" onClick="addBgtSeqforUpd(this.id,'<%= sBgt_seq %>','11','<%= sBgt_Fr_YY %>')" onkeyup="if(window.event.keyCode==13||this.length==10){checkCell('<%= iLineNo-1 %>','07','<%= sBgt_seq %>');}" /> </td>
+		<td style="width: 4%" class="style2">&nbsp;<input  type= "text" class="text_box1" style="color:blue;" size="4" maxlength="10" value="0.00" id = "T_<%= sBgt_seq %>_09" onClick="addBgtSeqforUpd(this.id,'<%= sBgt_seq %>','12','<%= sBgt_Fr_YY %>')" onkeyup="if(window.event.keyCode==13||this.length==10){checkCell('<%= iLineNo-1 %>','08','<%= sBgt_seq %>');}" /> </td>
+		<td style="width: 4%" class="style2">&nbsp;<input  type= "text" class="text_box1" style="color:blue;" size="4" maxlength="10" value="0.00" id = "T_<%= sBgt_seq %>_10" onClick="addBgtSeqforUpd(this.id,'<%= sBgt_seq %>','01','<%= sBgt_To_YY %>')" onkeyup="if(window.event.keyCode==13||this.length==10){checkCell('<%= iLineNo-1 %>','09','<%= sBgt_seq %>');}" /> </td>
+		<td style="width: 4%" class="style2">&nbsp;<input  type= "text" class="text_box1" style="color:blue;" size="4" maxlength="10" value="0.00" id = "T_<%= sBgt_seq %>_11" onClick="addBgtSeqforUpd(this.id,'<%= sBgt_seq %>','02','<%= sBgt_To_YY %>')" onkeyup="if(window.event.keyCode==13||this.length==10){checkCell('<%= iLineNo-1 %>','10','<%= sBgt_seq %>');}" /> </td>
+		<td style="width: 4%" class="style2">&nbsp;<input  type= "text" class="text_box1" style="color:blue;" size="4" maxlength="10" value="0.00" id = "T_<%= sBgt_seq %>_12" onClick="addBgtSeqforUpd(this.id,'<%= sBgt_seq %>','03','<%= sBgt_To_YY %>')" onkeyup="if(window.event.keyCode==13||this.length==10){checkCell('<%= iLineNo-1 %>','11','<%= sBgt_seq %>');}" /> </td>
+		<td style="width: 4%" class="style2">&nbsp;<input  type= "text" class="text_box1" style="color:blue;" size="4" maxlength="10" value="0.00" id = "T_<%= sBgt_seq %>_13" onClick="addBgtSeqforUpd(this.id,'<%= sBgt_seq %>',' ',' ')" onkeyup="if(window.event.keyCode==13||this.length==10){checkCell('<%= iLineNo-1 %>','12','<%= sBgt_seq %>');}" /> </td>
+	</tr>
+
+
+<script>
+
+     g_all_cell_id_array[<%= iLineNo %> - 1] = new Array(g_mnths_tot_col.length+2);
+
+     for(var i = 0; i < g_mnths_tot_col.length; i++){
+
+        g_bgt_seq_inserted[i + (g_mnths_tot_col.length)*(<%= iLineNo %> - 1)] = new Array(5);
+        g_bgt_seq_inserted[i + (g_mnths_tot_col.length)*(<%= iLineNo %> - 1)][0] = 'T_<%= sBgt_seq %>_'+g_mnths_tot_col[i];
+        g_bgt_seq_inserted[i + (g_mnths_tot_col.length)*(<%= iLineNo %> - 1)][1] = '<%= sBgt_seq %>';
+        g_bgt_seq_inserted[i + (g_mnths_tot_col.length)*(<%= iLineNo %> - 1)][2] =  g_bgt_mm_ordr[i] ;
+        g_bgt_seq_inserted[i + (g_mnths_tot_col.length)*(<%= iLineNo %> - 1)][3] =  g_bgt_mm_val[i] ;
+        g_bgt_seq_inserted[i + (g_mnths_tot_col.length)*(<%= iLineNo %> - 1)][4] =  g_bgt_yy_val[i] ;
+
+     }
+
+     for(var k = 0; k < g_mnths_tot_col.length ; k++){
+
+         g_all_cell_id_array[<%= iLineNo %> - 1][k] = 'T_<%= sBgt_seq %>_'+g_mnths_tot_col[k];
+
+         if('<%= sReadOnlyMkr %>' == 'T'){
+            document.getElementById(g_all_cell_id_array[<%= iLineNo %> - 1][k]).readOnly = true;
+         }else{
+            document.getElementById(g_all_cell_id_array[<%= iLineNo %> - 1][k]).readOnly = false;
+         }
+
+     }
+
+     g_all_cell_id_array[<%= iLineNo %> - 1][g_mnths_tot_col.length] = '<%= iGrp_index-1 %>'; 
+     g_all_cell_id_array[<%= iLineNo %> - 1][g_mnths_tot_col.length+1] = '<%= sBgt_seq %>'; 
+
+     //alert(g_all_cell_id_array[<%= iLineNo %> - 1][0]);
+
+   
+
+</script>
+-->
+<%
+                       if(sAmt_NA_mkr.equals("NE")){
+      
+                          sEnd_Bgt_seq_for_grp    = sBgt_seq;
+%>
+<!--
+<script>
+
+      g_grp_seq_array1[<%= iGrp_index %> - 1][1] = '<%= iLineNo-1 %>';
+
+      grp_seq_array.push('<%= sBgt_seq %>') ;
+
+      summationAnnual('T_<%= sBgt_seq %>_13','<%= sBgt_seq %>');
+
+      g_ne_cell_id_array[<%= iLineNo %> - 1] = new Array(g_mnths_tot_col.length+1);
+
+      for(var k = 0; k < g_mnths_tot_col.length ; k++){
+
+         g_ne_cell_id_array[<%= iLineNo %> - 1][k] = 'T_<%= sBgt_seq %>_'+g_mnths_tot_col[k];
+
+      }
+
+      g_ne_cell_id_array[<%= iLineNo %> - 1][g_mnths_tot_col.length] = '<%= iGrp_index-1 %>'; 
+
+</script>
+-->
+<%
+
+                      }
+
+                      if(sAmt_NA_mkr.equals("Y")){
+
+                         i_g_y_cell_index = i_g_y_cell_index + 1;
+%>
+<!--
+<script>
+
+      g_y_cell_id_array[<%= i_g_y_cell_index -1 %>] = new Array(g_mnths_tot_col.length+1);
+
+      for(var k = 0; k < g_mnths_tot_col.length ; k++){
+
+         g_y_cell_id_array[<%= i_g_y_cell_index -1 %>][k] = 'T_<%= sBgt_seq %>_'+g_mnths_tot_col[k];
+ 
+         document.getElementById('T_<%= sBgt_seq %>_'+g_mnths_tot_col[k]).value = '0.00';
+         document.getElementById('T_<%= sBgt_seq %>_'+g_mnths_tot_col[k]).readOnly = true;
+         
+      }
+
+      g_y_cell_id_array[<%= i_g_y_cell_index -1 %>][g_mnths_tot_col.length] = '<%= iGrp_index-1 %>'; 
+
+
+</script>
+-->
+
+<%
+
+                      }
+
+                      if(sAmt_NA_mkr.equals("S")){
+
+%>
+<!--
+<script>
+                   g_grp_seq_array1[<%= iGrp_index %> - 1][2] = <%= iLineNo %> - 1;
+                   g_grp_seq_array1[<%= iGrp_index %> - 1][3] = '<%= sBgt_seq %>' ;
+
+                   summationOfCellVal('<%= sBgt_seq %>',grp_seq_array);
+
+</script>
+-->
+<%
+                      }
+
+
+                 }
+
+                 rs2.close();
+                 ps2.close();
+
+                 rs2 = null;
+                 ps2 = null;
+      
+           } 
+           rs1.close();
+           ps1.close();
+
+           ps1=null;
+           rs1=null; 

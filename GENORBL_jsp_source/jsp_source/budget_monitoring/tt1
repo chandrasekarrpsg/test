@@ -1,0 +1,735 @@
+117a118,129
+> .style25 {
+>                                 text-align: center;
+> 				font-family: Arial;
+> 				font-size: 9pt;
+> 				background-color:  #9393FF;
+> }
+> .style26 {
+>                                 text-align: right;
+> 				font-family: Arial;
+> 				font-size: 9pt;
+> 				background-color:  #9393FF;
+> }
+278a291
+>   String prev_contr_matr_mkr        = new String("@");
+292a306,311
+>   String sub_tot_mtd_budget_t           = new String("");
+>   String sub_tot_mtd_budget_f           = new String("");
+>   String sub_tot_mtd_exp_act            = new String("");
+>   String sub_tot_ytd_budget_t           = new String("");
+>   String sub_tot_ytd_budget_f           = new String("");
+>   String sub_tot_ytd_exp_act            = new String("");
+570c589
+<        ps = mk.con.prepareStatement(" select a.gr_cd,bgt_hd,gr_desc "+
+---
+>        ps = mk.con.prepareStatement(" select a.gr_cd,bgt_hd,gr_desc,decode(nvl(contr_matr_mkr,'@'),'M','Materials','C','Contracts',nvl(contr_matr_mkr,'@'))  "+
+776a796,1200
+> if(!rs.getString(4).equals(prev_contr_matr_mkr) && !prev_contr_matr_mkr.equals("@")){
+> System.out.println("prevmkr:"+prev_contr_matr_mkr);
+> System.out.println("mkr:"+rs.getString(4));
+> 
+> if(prev_contr_matr_mkr.equals("Materials")){
+>   
+>        ps1 = mk.con.prepareStatement(" select to_char(nvl(sum(amt),0),'9999999990.999') "+
+>                                      " from BGTM_REPO_STRUC_SPL "+
+>                                      " where BGT_FROM = ? "+ 
+>                                      " and   bgt_mkr='B' "+
+>                                      " and   target_floor ='T' "+
+>                                      " and   STN_CD like decode(?,'BBGS','B','TGS','T','SGS','S','NCGS','N','CTM','C','EDGE','E','ALL','%') "+ 
+>                                      " and   SEC_CD like decode(?,'ALL','%',?) "+
+>                                      " and   gr_cd= ? "+
+>                                      " and   MM_VAL=to_char(to_date(?,'Mon'),'MM') "+
+>                                      " and   bgt_hd in ('2a-2','2b','2c','3a','3b','3c','4a','4b','4c','4d') "+
+>                                      " and   stn_extn is null ");
+> 
+>        ps1.setString(1,finyr1);
+>        ps1.setString(2,station);
+>        ps1.setString(3,section);
+>        ps1.setString(4,section);
+>        ps1.setString(5,prev_gr_cd);
+>        ps1.setString(6,month);
+>        rs1 = ps1.executeQuery();
+> while(rs1.next()){
+>   sub_tot_mtd_budget_t = rs1.getString(1);
+> }
+> rs1.close();
+> ps1.close();
+> }else{
+>        ps1 = mk.con.prepareStatement(" select to_char(nvl(sum(amt),0),'9999999990.999') "+
+>                                      " from BGTM_REPO_STRUC_SPL "+
+>                                      " where BGT_FROM = ? "+ 
+>                                      " and   bgt_mkr='B' "+
+>                                      " and   target_floor ='T' "+
+>                                      " and   STN_CD like decode(?,'BBGS','B','TGS','T','SGS','S','NCGS','N','CTM','C','EDGE','E','ALL','%') "+ 
+>                                      " and   SEC_CD like decode(?,'ALL','%',?) "+
+>                                      " and   gr_cd= ? "+
+>                                      " and   MM_VAL=to_char(to_date(?,'Mon'),'MM') "+
+>                                      " and   bgt_hd in ('5a','5b','5c','5d','5e','5f-1','5g','5h','19','20a','20b','20f') "+
+>                                      " and   stn_extn is null ");
+> 
+>        ps1.setString(1,finyr1);
+>        ps1.setString(2,station);
+>        ps1.setString(3,section);
+>        ps1.setString(4,section);
+>        ps1.setString(5,prev_gr_cd);
+>        ps1.setString(6,month);
+>        rs1 = ps1.executeQuery();
+> while(rs1.next()){
+>   sub_tot_mtd_budget_t = rs1.getString(1);
+> }
+> rs1.close();
+> ps1.close();
+> }
+>        
+> if(prev_contr_matr_mkr.equals("Materials")){
+>        ps1 = mk.con.prepareStatement(" select to_char(nvl(sum(amt),0),'9999999990.999') "+
+>                                      " from BGTM_REPO_STRUC_SPL "+
+>                                      " where BGT_FROM = ? "+ 
+>                                      " and   bgt_mkr='B' "+
+>                                      " and   target_floor ='F' "+
+>                                      " and   STN_CD like decode(?,'BBGS','B','TGS','T','SGS','S','NCGS','N','CTM','C','EDGE','E','ALL','%') "+ 
+>                                      " and   SEC_CD like decode(?,'ALL','%',?) "+
+>                                      " and   gr_cd= ? "+
+>                                      " and   MM_VAL=to_char(to_date(?,'Mon'),'MM') "+
+>                                      " and   bgt_hd in ('2a-2','2b','2c','3a','3b','3c','4a','4b','4c','4d') "+
+>                                      " and   stn_extn is null ");
+> 
+>        ps1.setString(1,finyr1);
+>        ps1.setString(2,station);
+>        ps1.setString(3,section);
+>        ps1.setString(4,section);
+>        ps1.setString(5,prev_gr_cd);
+>        ps1.setString(6,month);
+>        rs1 = ps1.executeQuery();
+> while(rs1.next()){
+>   sub_tot_mtd_budget_f = rs1.getString(1);
+> }
+> rs1.close();
+> ps1.close();
+> }else{
+>        ps1 = mk.con.prepareStatement(" select to_char(nvl(sum(amt),0),'9999999990.999') "+
+>                                      " from BGTM_REPO_STRUC_SPL "+
+>                                      " where BGT_FROM = ? "+ 
+>                                      " and   bgt_mkr='B' "+
+>                                      " and   target_floor ='F' "+
+>                                      " and   STN_CD like decode(?,'BBGS','B','TGS','T','SGS','S','NCGS','N','CTM','C','EDGE','E','ALL','%') "+ 
+>                                      " and   SEC_CD like decode(?,'ALL','%',?) "+
+>                                      " and   gr_cd= ? "+
+>                                      " and   MM_VAL=to_char(to_date(?,'Mon'),'MM') "+
+>                                      " and   bgt_hd in ('5a','5b','5c','5d','5e','5f-1','5g','5h','19','20a','20b','20f') "+
+>                                      " and   stn_extn is null ");
+> 
+>        ps1.setString(1,finyr1);
+>        ps1.setString(2,station);
+>        ps1.setString(3,section);
+>        ps1.setString(4,section);
+>        ps1.setString(5,prev_gr_cd);
+>        ps1.setString(6,month);
+>        rs1 = ps1.executeQuery();
+> while(rs1.next()){
+>   sub_tot_mtd_budget_f = rs1.getString(1);
+> }
+> rs1.close();
+> ps1.close();
+> }
+> 
+> if(prev_contr_matr_mkr.equals("Materials")){
+> 
+>        ps1 = mk.con.prepareStatement(" select to_char(nvl(sum(amt),0),'9999999990.999') "+
+>                                      " from BGTM_REPO_STRUC_SPL "+
+>                                      " where BGT_FROM=? "+ 
+>                                      " and   bgt_mkr='A' "+
+>                                      " and   BILL_REL_RECV=? "+
+>                                      " and   STN_CD like decode(?,'BBGS','B','TGS','T','SGS','S','NCGS','N','CTM','C','EDGE','E','ALL','%') "+ 
+>                                      " and   SEC_CD like decode(?,'ALL','%',?) "+
+>                                      " and   gr_cd=? "+
+>                                      " and   MM_VAL=to_char(to_date(?,'Mon'),'MM') "+
+>                                      " and   bgt_hd in ('2a','2b','2c','3a','3b','3c','4a','4b','4c','4d') "+
+>                                      " and   stn_extn is null ");
+>        ps1.setString(1,finyr1);
+>        ps1.setString(2,mon_basis);
+>        ps1.setString(3,station);
+>        ps1.setString(4,section);
+>        ps1.setString(5,section);
+>        ps1.setString(6,prev_gr_cd);
+>        ps1.setString(7,month);
+>        rs1 = ps1.executeQuery();
+> while(rs1.next()){
+>   sub_tot_mtd_exp_act = rs1.getString(1);
+> }
+> rs1.close();
+> ps1.close();
+> }else{
+>        ps1 = mk.con.prepareStatement(" select to_char(nvl(sum(amt),0),'9999999990.999') "+
+>                                      " from BGTM_REPO_STRUC_SPL "+
+>                                      " where BGT_FROM=? "+ 
+>                                      " and   bgt_mkr='A' "+
+>                                      " and   BILL_REL_RECV=? "+
+>                                      " and   STN_CD like decode(?,'BBGS','B','TGS','T','SGS','S','NCGS','N','CTM','C','EDGE','E','ALL','%') "+ 
+>                                      " and   SEC_CD like decode(?,'ALL','%',?) "+
+>                                      " and   gr_cd=? "+
+>                                      " and   MM_VAL=to_char(to_date(?,'Mon'),'MM') "+
+>                                      " and   bgt_hd in ('5a','5b','5c','5d','5e','5f-1','5g','5h','19','20a','20b','20f') "+
+>                                      " and   stn_extn is null ");
+>        ps1.setString(1,finyr1);
+>        ps1.setString(2,mon_basis);
+>        ps1.setString(3,station);
+>        ps1.setString(4,section);
+>        ps1.setString(5,section);
+>        ps1.setString(6,prev_gr_cd);
+>        ps1.setString(7,month);
+>        rs1 = ps1.executeQuery();
+> while(rs1.next()){
+>   sub_tot_mtd_exp_act = rs1.getString(1);
+> }
+> rs1.close();
+> ps1.close();
+> }
+> 
+> if(prev_contr_matr_mkr.equals("Materials")){
+> 
+>        ps1 = mk.con.prepareStatement(" select to_char(nvl(sum(amt),0),'9999999990.999')  from BGTM_REPO_STRUC_SPL "+ 
+>                                      " where BGT_FROM = ? "+ 
+>                                      " and   bgt_mkr='B' "+ 
+>                                      " and   target_floor ='T' "+
+>                                      " and   STN_CD like decode(?,'BBGS','B','TGS','T','SGS','S','NCGS','N','CTM','C','EDGE','E','ALL','%') "+ 
+>                                      " and   SEC_CD like decode(?,'ALL','%',?) "+ 
+>                                      " and   gr_cd= ? "+
+>                                      " and   bgt_hd in ('2a-2','2b','2c','3a','3b','3c','4a','4b','4c','4d') "+
+>                                      " and   to_date(MM_VAL||YY_VAL,'mmyy') between to_date('04'||substr(?,3,2),'MMYY') and to_date(to_char(to_date(?,'Mon'),'MM')||decode(?,'Apr',substr(?,3,2),'May',substr(?,3,2),'Jun',substr(?,3,2),'Jul',substr(?,3,2),'Aug',substr(?,3,2),'Sep',substr(?,3,2),'Oct',substr(?,3,2),'Nov',substr(?,3,2),'Dec',substr(?,3,2),'Jan',to_char(add_months(to_date(?,'YYYY'),12),'YY'),'Feb',to_char(add_months(to_date(?,'YYYY'),12),'YY'),'Mar',to_char(add_months(to_date(?,'YYYY'),12),'YY')),'MMYY') "+
+>                                      " and   stn_extn is null ");
+>        ps1.setString(1,finyr1);
+>        ps1.setString(2,station);
+>        ps1.setString(3,section);
+>        ps1.setString(4,section);
+>        ps1.setString(5,prev_gr_cd);
+>        ps1.setString(6,finyr1);
+>        ps1.setString(7,month);
+>        ps1.setString(8,month);
+>        ps1.setString(9,finyr1);
+>        ps1.setString(10,finyr1);
+>        ps1.setString(11,finyr1);
+>        ps1.setString(12,finyr1);
+>        ps1.setString(13,finyr1);
+>        ps1.setString(14,finyr1);
+>        ps1.setString(15,finyr1);
+>        ps1.setString(16,finyr1);
+>        ps1.setString(17,finyr1);
+>        ps1.setString(18,finyr1);
+>        ps1.setString(19,finyr1);
+>        ps1.setString(20,finyr1);
+>        rs1 = ps1.executeQuery();
+> while(rs1.next()){
+>   sub_tot_ytd_budget_t = rs1.getString(1);
+> }
+> rs1.close();
+> ps1.close();
+> }else{
+>        ps1 = mk.con.prepareStatement(" select to_char(nvl(sum(amt),0),'9999999990.999')  from BGTM_REPO_STRUC_SPL "+ 
+>                                      " where BGT_FROM = ? "+ 
+>                                      " and   bgt_mkr='B' "+ 
+>                                      " and   target_floor ='T' "+
+>                                      " and   STN_CD like decode(?,'BBGS','B','TGS','T','SGS','S','NCGS','N','CTM','C','EDGE','E','ALL','%') "+ 
+>                                      " and   SEC_CD like decode(?,'ALL','%',?) "+ 
+>                                      " and   gr_cd= ? "+
+>                                      " and   bgt_hd in ('5a','5b','5c','5d','5e','5f-1','5g','5h','19','20a','20b','20f') "+
+>                                      " and   to_date(MM_VAL||YY_VAL,'mmyy') between to_date('04'||substr(?,3,2),'MMYY') and to_date(to_char(to_date(?,'Mon'),'MM')||decode(?,'Apr',substr(?,3,2),'May',substr(?,3,2),'Jun',substr(?,3,2),'Jul',substr(?,3,2),'Aug',substr(?,3,2),'Sep',substr(?,3,2),'Oct',substr(?,3,2),'Nov',substr(?,3,2),'Dec',substr(?,3,2),'Jan',to_char(add_months(to_date(?,'YYYY'),12),'YY'),'Feb',to_char(add_months(to_date(?,'YYYY'),12),'YY'),'Mar',to_char(add_months(to_date(?,'YYYY'),12),'YY')),'MMYY') "+
+>                                      " and   stn_extn is null ");
+>        ps1.setString(1,finyr1);
+>        ps1.setString(2,station);
+>        ps1.setString(3,section);
+>        ps1.setString(4,section);
+>        ps1.setString(5,prev_gr_cd);
+>        ps1.setString(6,finyr1);
+>        ps1.setString(7,month);
+>        ps1.setString(8,month);
+>        ps1.setString(9,finyr1);
+>        ps1.setString(10,finyr1);
+>        ps1.setString(11,finyr1);
+>        ps1.setString(12,finyr1);
+>        ps1.setString(13,finyr1);
+>        ps1.setString(14,finyr1);
+>        ps1.setString(15,finyr1);
+>        ps1.setString(16,finyr1);
+>        ps1.setString(17,finyr1);
+>        ps1.setString(18,finyr1);
+>        ps1.setString(19,finyr1);
+>        ps1.setString(20,finyr1);
+>        rs1 = ps1.executeQuery();
+> while(rs1.next()){
+>   sub_tot_ytd_budget_t = rs1.getString(1);
+> }
+> rs1.close();
+> ps1.close();
+> }
+>        
+> if(prev_contr_matr_mkr.equals("Materials")){
+>        ps1 = mk.con.prepareStatement(" select to_char(nvl(sum(amt),0),'9999999990.999')  from BGTM_REPO_STRUC_SPL "+ 
+>                                      " where BGT_FROM = ? "+ 
+>                                      " and   bgt_mkr='B' "+ 
+>                                      " and   target_floor ='F' "+
+>                                      " and   STN_CD like decode(?,'BBGS','B','TGS','T','SGS','S','NCGS','N','CTM','C','EDGE','E','ALL','%') "+ 
+>                                      " and   SEC_CD like decode(?,'ALL','%',?) "+ 
+>                                      " and   gr_cd= ? "+ 
+>                                      " and   bgt_hd in ('2a-2','2b','2c','3a','3b','3c','4a','4b','4c','4d') "+
+>                                      " and   to_date(MM_VAL||YY_VAL,'mmyy') between to_date('04'||substr(?,3,2),'MMYY') and to_date(to_char(to_date(?,'Mon'),'MM')||decode(?,'Apr',substr(?,3,2),'May',substr(?,3,2),'Jun',substr(?,3,2),'Jul',substr(?,3,2),'Aug',substr(?,3,2),'Sep',substr(?,3,2),'Oct',substr(?,3,2),'Nov',substr(?,3,2),'Dec',substr(?,3,2),'Jan',to_char(add_months(to_date(?,'YYYY'),12),'YY'),'Feb',to_char(add_months(to_date(?,'YYYY'),12),'YY'),'Mar',to_char(add_months(to_date(?,'YYYY'),12),'YY')),'MMYY') "+
+>                                      " and   stn_extn is null ");
+>        ps1.setString(1,finyr1);
+>        ps1.setString(2,station);
+>        ps1.setString(3,section);
+>        ps1.setString(4,section);
+>        ps1.setString(5,prev_gr_cd);
+>        ps1.setString(6,finyr1);
+>        ps1.setString(7,month);
+>        ps1.setString(8,month);
+>        ps1.setString(9,finyr1);
+>        ps1.setString(10,finyr1);
+>        ps1.setString(11,finyr1);
+>        ps1.setString(12,finyr1);
+>        ps1.setString(13,finyr1);
+>        ps1.setString(14,finyr1);
+>        ps1.setString(15,finyr1);
+>        ps1.setString(16,finyr1);
+>        ps1.setString(17,finyr1);
+>        ps1.setString(18,finyr1);
+>        ps1.setString(19,finyr1);
+>        ps1.setString(20,finyr1);
+>        rs1 = ps1.executeQuery();
+> while(rs1.next()){
+>   sub_tot_ytd_budget_f = rs1.getString(1);
+> }
+> rs1.close();
+> ps1.close();
+> } else{
+>        ps1 = mk.con.prepareStatement(" select to_char(nvl(sum(amt),0),'9999999990.999')  from BGTM_REPO_STRUC_SPL "+ 
+>                                      " where BGT_FROM = ? "+ 
+>                                      " and   bgt_mkr='B' "+ 
+>                                      " and   target_floor ='F' "+
+>                                      " and   STN_CD like decode(?,'BBGS','B','TGS','T','SGS','S','NCGS','N','CTM','C','EDGE','E','ALL','%') "+ 
+>                                      " and   SEC_CD like decode(?,'ALL','%',?) "+ 
+>                                      " and   gr_cd= ? "+ 
+>                                      " and   bgt_hd in ('5a','5b','5c','5d','5e','5f-1','5g','5h','19','20a','20b','20f') "+
+>                                      " and   to_date(MM_VAL||YY_VAL,'mmyy') between to_date('04'||substr(?,3,2),'MMYY') and to_date(to_char(to_date(?,'Mon'),'MM')||decode(?,'Apr',substr(?,3,2),'May',substr(?,3,2),'Jun',substr(?,3,2),'Jul',substr(?,3,2),'Aug',substr(?,3,2),'Sep',substr(?,3,2),'Oct',substr(?,3,2),'Nov',substr(?,3,2),'Dec',substr(?,3,2),'Jan',to_char(add_months(to_date(?,'YYYY'),12),'YY'),'Feb',to_char(add_months(to_date(?,'YYYY'),12),'YY'),'Mar',to_char(add_months(to_date(?,'YYYY'),12),'YY')),'MMYY') "+
+>                                      " and   stn_extn is null ");
+>        ps1.setString(1,finyr1);
+>        ps1.setString(2,station);
+>        ps1.setString(3,section);
+>        ps1.setString(4,section);
+>        ps1.setString(5,prev_gr_cd);
+>        ps1.setString(6,finyr1);
+>        ps1.setString(7,month);
+>        ps1.setString(8,month);
+>        ps1.setString(9,finyr1);
+>        ps1.setString(10,finyr1);
+>        ps1.setString(11,finyr1);
+>        ps1.setString(12,finyr1);
+>        ps1.setString(13,finyr1);
+>        ps1.setString(14,finyr1);
+>        ps1.setString(15,finyr1);
+>        ps1.setString(16,finyr1);
+>        ps1.setString(17,finyr1);
+>        ps1.setString(18,finyr1);
+>        ps1.setString(19,finyr1);
+>        ps1.setString(20,finyr1);
+>        rs1 = ps1.executeQuery();
+> while(rs1.next()){
+>   sub_tot_ytd_budget_f = rs1.getString(1);
+> }
+> rs1.close();
+> ps1.close();
+> }
+>        
+> if(prev_contr_matr_mkr.equals("Materials")){
+>        ps1 = mk.con.prepareStatement(" select to_char(nvl(sum(amt),0),'9999999990.999')  from BGTM_REPO_STRUC_SPL "+ 
+>                                      " where BGT_FROM = ? "+ 
+>                                      " and   bgt_mkr='A' "+ 
+>                                      " and   BILL_REL_RECV =? "+
+>                                      " and   STN_CD like decode(?,'BBGS','B','TGS','T','SGS','S','NCGS','N','CTM','C','EDGE','E','ALL','%') "+ 
+>                                      " and   SEC_CD like decode(?,'ALL','%',?) "+ 
+>                                      " and   gr_cd= ? "+ 
+>                                      " and   bgt_hd in ('2a','2b','2c','3a','3b','3c','4a','4b','4c','4d') "+
+>                                      " and   to_date(MM_VAL||YY_VAL,'mmyy') between to_date('04'||substr(?,3,2),'MMYY') and to_date(to_char(to_date(?,'Mon'),'MM')||decode(?,'Apr',substr(?,3,2),'May',substr(?,3,2),'Jun',substr(?,3,2),'Jul',substr(?,3,2),'Aug',substr(?,3,2),'Sep',substr(?,3,2),'Oct',substr(?,3,2),'Nov',substr(?,3,2),'Dec',substr(?,3,2),'Jan',to_char(add_months(to_date(?,'YYYY'),12),'YY'),'Feb',to_char(add_months(to_date(?,'YYYY'),12),'YY'),'Mar',to_char(add_months(to_date(?,'YYYY'),12),'YY')),'MMYY') "+
+>                                      " and   stn_extn is null ");
+>        ps1.setString(1,finyr1);
+>        ps1.setString(2,mon_basis);
+>        ps1.setString(3,station);
+>        ps1.setString(4,section);
+>        ps1.setString(5,section);
+>        ps1.setString(6,prev_gr_cd);
+>        ps1.setString(7,finyr1);
+>        ps1.setString(8,month);
+>        ps1.setString(9,month);
+>        ps1.setString(10,finyr1);
+>        ps1.setString(11,finyr1);
+>        ps1.setString(12,finyr1);
+>        ps1.setString(13,finyr1);
+>        ps1.setString(14,finyr1);
+>        ps1.setString(15,finyr1);
+>        ps1.setString(16,finyr1);
+>        ps1.setString(17,finyr1);
+>        ps1.setString(18,finyr1);
+>        ps1.setString(19,finyr1);
+>        ps1.setString(20,finyr1);
+>        ps1.setString(21,finyr1);
+>        rs1 = ps1.executeQuery();
+> while(rs1.next()){
+>   sub_tot_ytd_exp_act = rs1.getString(1);
+> }
+> rs1.close();
+> ps1.close();
+> }else{
+>        ps1 = mk.con.prepareStatement(" select to_char(nvl(sum(amt),0),'9999999990.999')  from BGTM_REPO_STRUC_SPL "+ 
+>                                      " where BGT_FROM = ? "+ 
+>                                      " and   bgt_mkr='A' "+ 
+>                                      " and   BILL_REL_RECV =? "+
+>                                      " and   STN_CD like decode(?,'BBGS','B','TGS','T','SGS','S','NCGS','N','CTM','C','EDGE','E','ALL','%') "+ 
+>                                      " and   SEC_CD like decode(?,'ALL','%',?) "+ 
+>                                      " and   gr_cd= ? "+ 
+>                                      " and   bgt_hd in ('5a','5b','5c','5d','5e','5f-1','5g','5h','19','20a','20b','20f') "+
+>                                      " and   to_date(MM_VAL||YY_VAL,'mmyy') between to_date('04'||substr(?,3,2),'MMYY') and to_date(to_char(to_date(?,'Mon'),'MM')||decode(?,'Apr',substr(?,3,2),'May',substr(?,3,2),'Jun',substr(?,3,2),'Jul',substr(?,3,2),'Aug',substr(?,3,2),'Sep',substr(?,3,2),'Oct',substr(?,3,2),'Nov',substr(?,3,2),'Dec',substr(?,3,2),'Jan',to_char(add_months(to_date(?,'YYYY'),12),'YY'),'Feb',to_char(add_months(to_date(?,'YYYY'),12),'YY'),'Mar',to_char(add_months(to_date(?,'YYYY'),12),'YY')),'MMYY') "+
+>                                      " and   stn_extn is null ");
+>        ps1.setString(1,finyr1);
+>        ps1.setString(2,mon_basis);
+>        ps1.setString(3,station);
+>        ps1.setString(4,section);
+>        ps1.setString(5,section);
+>        ps1.setString(6,prev_gr_cd);
+>        ps1.setString(7,finyr1);
+>        ps1.setString(8,month);
+>        ps1.setString(9,month);
+>        ps1.setString(10,finyr1);
+>        ps1.setString(11,finyr1);
+>        ps1.setString(12,finyr1);
+>        ps1.setString(13,finyr1);
+>        ps1.setString(14,finyr1);
+>        ps1.setString(15,finyr1);
+>        ps1.setString(16,finyr1);
+>        ps1.setString(17,finyr1);
+>        ps1.setString(18,finyr1);
+>        ps1.setString(19,finyr1);
+>        ps1.setString(20,finyr1);
+>        ps1.setString(21,finyr1);
+>        rs1 = ps1.executeQuery();
+> while(rs1.next()){
+>   sub_tot_ytd_exp_act = rs1.getString(1);
+> }
+> rs1.close();
+> ps1.close();
+> }
+> %>
+>         <tr>
+>                 <td style="width: 30%" class="style25"><strong><%=prev_contr_matr_mkr%> Total</strong></td>
+>                 <td style="width: 10%" class="style25"><strong>&nbsp;</strong></td>
+>                 <td style="width: 10%" class="style26"><strong><%=sub_tot_mtd_budget_t%></strong></td>
+>                 <td style="width: 10%" class="style26"><strong><%=sub_tot_mtd_budget_f%></strong></td>
+>                 <td style="width: 10%" class="style26"><strong><%=sub_tot_mtd_exp_act%></strong></td>
+>                 <td style="width: 10%" class="style26"><strong><%=sub_tot_ytd_budget_t%></strong></td>
+>                 <td style="width: 10%" class="style26"><strong><%=sub_tot_ytd_budget_f%></strong></td>
+>                 <td style="width: 10%" class="style26"><strong><%=sub_tot_ytd_exp_act%></strong></td>
+>         </tr>
+> <%
+> }
+1029a1454
+> prev_contr_matr_mkr = rs.getString(4);
+1033a1459,1471
+> if(group.equals("1")){
+>   
+>        ps1 = mk.con.prepareStatement(" select to_char(nvl(sum(amt),0),'9999999990.999') "+
+>                                      " from BGTM_REPO_STRUC_SPL "+
+>                                      " where BGT_FROM = ? "+ 
+>                                      " and   bgt_mkr='B' "+
+>                                      " and   target_floor ='T' "+
+>                                      " and   STN_CD like decode(?,'BBGS','B','TGS','T','SGS','S','NCGS','N','CTM','C','EDGE','E','ALL','%') "+ 
+>                                      " and   SEC_CD like decode(?,'ALL','%',?) "+
+>                                      " and   gr_cd= ? "+
+>                                      " and   MM_VAL=to_char(to_date(?,'Mon'),'MM') "+
+>                                      " and   bgt_hd in ('5a','5b','5c','5d','5e','5f-1','5g','5h','19','20a','20b','20f') "+
+>                                      " and   stn_extn is null ");
+1034a1473,1758
+>        ps1.setString(1,finyr1);
+>        ps1.setString(2,station);
+>        ps1.setString(3,section);
+>        ps1.setString(4,section);
+>        ps1.setString(5,prev_gr_cd);
+>        ps1.setString(6,month);
+>        rs1 = ps1.executeQuery();
+> while(rs1.next()){
+>   sub_tot_mtd_budget_t = rs1.getString(1);
+> }
+> rs1.close();
+> ps1.close();
+>        
+>        ps1 = mk.con.prepareStatement(" select to_char(nvl(sum(amt),0),'9999999990.999') "+
+>                                      " from BGTM_REPO_STRUC_SPL "+
+>                                      " where BGT_FROM = ? "+ 
+>                                      " and   bgt_mkr='B' "+
+>                                      " and   target_floor ='F' "+
+>                                      " and   STN_CD like decode(?,'BBGS','B','TGS','T','SGS','S','NCGS','N','CTM','C','EDGE','E','ALL','%') "+ 
+>                                      " and   SEC_CD like decode(?,'ALL','%',?) "+
+>                                      " and   gr_cd= ? "+
+>                                      " and   MM_VAL=to_char(to_date(?,'Mon'),'MM') "+
+>                                      " and   bgt_hd in ('5a','5b','5c','5d','5e','5f-1','5g','5h','19','20a','20b','20f') "+
+>                                      " and   stn_extn is null ");
+> 
+>        ps1.setString(1,finyr1);
+>        ps1.setString(2,station);
+>        ps1.setString(3,section);
+>        ps1.setString(4,section);
+>        ps1.setString(5,prev_gr_cd);
+>        ps1.setString(6,month);
+>        rs1 = ps1.executeQuery();
+> while(rs1.next()){
+>   sub_tot_mtd_budget_f = rs1.getString(1);
+> }
+> rs1.close();
+> ps1.close();
+> 
+>        ps1 = mk.con.prepareStatement(" select to_char(nvl(sum(amt),0),'9999999990.999') "+
+>                                      " from BGTM_REPO_STRUC_SPL "+
+>                                      " where BGT_FROM=? "+ 
+>                                      " and   bgt_mkr='A' "+
+>                                      " and   BILL_REL_RECV=? "+
+>                                      " and   STN_CD like decode(?,'BBGS','B','TGS','T','SGS','S','NCGS','N','CTM','C','EDGE','E','ALL','%') "+ 
+>                                      " and   SEC_CD like decode(?,'ALL','%',?) "+
+>                                      " and   gr_cd=? "+
+>                                      " and   MM_VAL=to_char(to_date(?,'Mon'),'MM') "+
+>                                      " and   bgt_hd in ('5a','5b','5c','5d','5e','5f-1','5g','5h','19','20a','20b','20f') "+
+>                                      " and   stn_extn is null ");
+>        ps1.setString(1,finyr1);
+>        ps1.setString(2,mon_basis);
+>        ps1.setString(3,station);
+>        ps1.setString(4,section);
+>        ps1.setString(5,section);
+>        ps1.setString(6,prev_gr_cd);
+>        ps1.setString(7,month);
+>        rs1 = ps1.executeQuery();
+> while(rs1.next()){
+>   sub_tot_mtd_exp_act = rs1.getString(1);
+> }
+> rs1.close();
+> ps1.close();
+> 
+>        ps1 = mk.con.prepareStatement(" select to_char(nvl(sum(amt),0),'9999999990.999')  from BGTM_REPO_STRUC_SPL "+ 
+>                                      " where BGT_FROM = ? "+ 
+>                                      " and   bgt_mkr='B' "+ 
+>                                      " and   target_floor ='T' "+
+>                                      " and   STN_CD like decode(?,'BBGS','B','TGS','T','SGS','S','NCGS','N','CTM','C','EDGE','E','ALL','%') "+ 
+>                                      " and   SEC_CD like decode(?,'ALL','%',?) "+ 
+>                                      " and   gr_cd= ? "+
+>                                      " and   bgt_hd in ('5a','5b','5c','5d','5e','5f-1','5g','5h','19','20a','20b','20f') "+
+>                                      " and   to_date(MM_VAL||YY_VAL,'mmyy') between to_date('04'||substr(?,3,2),'MMYY') and to_date(to_char(to_date(?,'Mon'),'MM')||decode(?,'Apr',substr(?,3,2),'May',substr(?,3,2),'Jun',substr(?,3,2),'Jul',substr(?,3,2),'Aug',substr(?,3,2),'Sep',substr(?,3,2),'Oct',substr(?,3,2),'Nov',substr(?,3,2),'Dec',substr(?,3,2),'Jan',to_char(add_months(to_date(?,'YYYY'),12),'YY'),'Feb',to_char(add_months(to_date(?,'YYYY'),12),'YY'),'Mar',to_char(add_months(to_date(?,'YYYY'),12),'YY')),'MMYY') "+
+>                                      " and   stn_extn is null ");
+>        ps1.setString(1,finyr1);
+>        ps1.setString(2,station);
+>        ps1.setString(3,section);
+>        ps1.setString(4,section);
+>        ps1.setString(5,prev_gr_cd);
+>        ps1.setString(6,finyr1);
+>        ps1.setString(7,month);
+>        ps1.setString(8,month);
+>        ps1.setString(9,finyr1);
+>        ps1.setString(10,finyr1);
+>        ps1.setString(11,finyr1);
+>        ps1.setString(12,finyr1);
+>        ps1.setString(13,finyr1);
+>        ps1.setString(14,finyr1);
+>        ps1.setString(15,finyr1);
+>        ps1.setString(16,finyr1);
+>        ps1.setString(17,finyr1);
+>        ps1.setString(18,finyr1);
+>        ps1.setString(19,finyr1);
+>        ps1.setString(20,finyr1);
+>        rs1 = ps1.executeQuery();
+> while(rs1.next()){
+>   sub_tot_ytd_budget_t = rs1.getString(1);
+> }
+> rs1.close();
+> ps1.close();
+>        
+>        ps1 = mk.con.prepareStatement(" select to_char(nvl(sum(amt),0),'9999999990.999')  from BGTM_REPO_STRUC_SPL "+ 
+>                                      " where BGT_FROM = ? "+ 
+>                                      " and   bgt_mkr='B' "+ 
+>                                      " and   target_floor ='F' "+
+>                                      " and   STN_CD like decode(?,'BBGS','B','TGS','T','SGS','S','NCGS','N','CTM','C','EDGE','E','ALL','%') "+ 
+>                                      " and   SEC_CD like decode(?,'ALL','%',?) "+ 
+>                                      " and   gr_cd= ? "+ 
+>                                      " and   bgt_hd in ('5a','5b','5c','5d','5e','5f-1','5g','5h','19','20a','20b','20f') "+
+>                                      " and   to_date(MM_VAL||YY_VAL,'mmyy') between to_date('04'||substr(?,3,2),'MMYY') and to_date(to_char(to_date(?,'Mon'),'MM')||decode(?,'Apr',substr(?,3,2),'May',substr(?,3,2),'Jun',substr(?,3,2),'Jul',substr(?,3,2),'Aug',substr(?,3,2),'Sep',substr(?,3,2),'Oct',substr(?,3,2),'Nov',substr(?,3,2),'Dec',substr(?,3,2),'Jan',to_char(add_months(to_date(?,'YYYY'),12),'YY'),'Feb',to_char(add_months(to_date(?,'YYYY'),12),'YY'),'Mar',to_char(add_months(to_date(?,'YYYY'),12),'YY')),'MMYY') "+
+>                                      " and   stn_extn is null ");
+>        ps1.setString(1,finyr1);
+>        ps1.setString(2,station);
+>        ps1.setString(3,section);
+>        ps1.setString(4,section);
+>        ps1.setString(5,prev_gr_cd);
+>        ps1.setString(6,finyr1);
+>        ps1.setString(7,month);
+>        ps1.setString(8,month);
+>        ps1.setString(9,finyr1);
+>        ps1.setString(10,finyr1);
+>        ps1.setString(11,finyr1);
+>        ps1.setString(12,finyr1);
+>        ps1.setString(13,finyr1);
+>        ps1.setString(14,finyr1);
+>        ps1.setString(15,finyr1);
+>        ps1.setString(16,finyr1);
+>        ps1.setString(17,finyr1);
+>        ps1.setString(18,finyr1);
+>        ps1.setString(19,finyr1);
+>        ps1.setString(20,finyr1);
+>        rs1 = ps1.executeQuery();
+> while(rs1.next()){
+>   sub_tot_ytd_budget_f = rs1.getString(1);
+> }
+> rs1.close();
+> ps1.close();
+>        
+>        ps1 = mk.con.prepareStatement(" select to_char(nvl(sum(amt),0),'9999999990.999')  from BGTM_REPO_STRUC_SPL "+ 
+>                                      " where BGT_FROM = ? "+ 
+>                                      " and   bgt_mkr='A' "+ 
+>                                      " and   BILL_REL_RECV =? "+
+>                                      " and   STN_CD like decode(?,'BBGS','B','TGS','T','SGS','S','NCGS','N','CTM','C','EDGE','E','ALL','%') "+ 
+>                                      " and   SEC_CD like decode(?,'ALL','%',?) "+ 
+>                                      " and   gr_cd= ? "+ 
+>                                      " and   bgt_hd in ('5a','5b','5c','5d','5e','5f-1','5g','5h','19','20a','20b','20f') "+
+>                                      " and   to_date(MM_VAL||YY_VAL,'mmyy') between to_date('04'||substr(?,3,2),'MMYY') and to_date(to_char(to_date(?,'Mon'),'MM')||decode(?,'Apr',substr(?,3,2),'May',substr(?,3,2),'Jun',substr(?,3,2),'Jul',substr(?,3,2),'Aug',substr(?,3,2),'Sep',substr(?,3,2),'Oct',substr(?,3,2),'Nov',substr(?,3,2),'Dec',substr(?,3,2),'Jan',to_char(add_months(to_date(?,'YYYY'),12),'YY'),'Feb',to_char(add_months(to_date(?,'YYYY'),12),'YY'),'Mar',to_char(add_months(to_date(?,'YYYY'),12),'YY')),'MMYY') "+
+>                                      " and   stn_extn is null ");
+>        ps1.setString(1,finyr1);
+>        ps1.setString(2,mon_basis);
+>        ps1.setString(3,station);
+>        ps1.setString(4,section);
+>        ps1.setString(5,section);
+>        ps1.setString(6,prev_gr_cd);
+>        ps1.setString(7,finyr1);
+>        ps1.setString(8,month);
+>        ps1.setString(9,month);
+>        ps1.setString(10,finyr1);
+>        ps1.setString(11,finyr1);
+>        ps1.setString(12,finyr1);
+>        ps1.setString(13,finyr1);
+>        ps1.setString(14,finyr1);
+>        ps1.setString(15,finyr1);
+>        ps1.setString(16,finyr1);
+>        ps1.setString(17,finyr1);
+>        ps1.setString(18,finyr1);
+>        ps1.setString(19,finyr1);
+>        ps1.setString(20,finyr1);
+>        ps1.setString(21,finyr1);
+>        rs1 = ps1.executeQuery();
+> while(rs1.next()){
+>   sub_tot_ytd_exp_act = rs1.getString(1);
+> }
+> rs1.close();
+> ps1.close();
+> %>
+>         <tr>
+>                 <td style="width: 30%" class="style25"><strong><%=prev_contr_matr_mkr%> Total</strong></td>
+>                 <td style="width: 10%" class="style25"><strong>&nbsp;</strong></td>
+>                 <td style="width: 10%" class="style26"><strong><%=sub_tot_mtd_budget_t%></strong></td>
+>                 <td style="width: 10%" class="style26"><strong><%=sub_tot_mtd_budget_f%></strong></td>
+>                 <td style="width: 10%" class="style26"><strong><%=sub_tot_mtd_exp_act%></strong></td>
+>                 <td style="width: 10%" class="style26"><strong><%=sub_tot_ytd_budget_t%></strong></td>
+>                 <td style="width: 10%" class="style26"><strong><%=sub_tot_ytd_budget_f%></strong></td>
+>                 <td style="width: 10%" class="style26"><strong><%=sub_tot_ytd_exp_act%></strong></td>
+>         </tr>
+> <%
+> }
+> 
+>        ps1 = mk.con.prepareStatement(" select to_char(nvl(sum(amt),0),'9999999990.999') "+
+>                                      " from BGTM_REPO_STRUC_SPL "+
+>                                      " where BGT_FROM = ? "+ 
+>                                      " and   bgt_mkr='B' "+
+>                                      " and   target_floor ='T' "+
+>                                      " and   STN_CD like decode(?,'BBGS','B','TGS','T','SGS','S','NCGS','N','CTM','C','EDGE','E','ALL','%') "+ 
+>                                      " and   SEC_CD like decode(?,'ALL','%',?) "+
+>                                      " and   gr_cd= ? "+
+>                                      " and   MM_VAL=to_char(to_date(?,'Mon'),'MM') "+
+>                                      " and   stn_extn is null ");
+> 
+>        ps1.setString(1,finyr1);
+>        ps1.setString(2,station);
+>        ps1.setString(3,section);
+>        ps1.setString(4,section);
+>        ps1.setString(5,prev_gr_cd);
+>        ps1.setString(6,month);
+>        rs1 = ps1.executeQuery();
+> while(rs1.next()){
+>   tot_mtd_budget_t = rs1.getString(1);
+> }
+> rs1.close();
+> ps1.close();
+>        
+>        ps1 = mk.con.prepareStatement(" select to_char(nvl(sum(amt),0),'9999999990.999') "+
+>                                      " from BGTM_REPO_STRUC_SPL "+
+>                                      " where BGT_FROM = ? "+ 
+>                                      " and   bgt_mkr='B' "+
+>                                      " and   target_floor ='F' "+
+>                                      " and   STN_CD like decode(?,'BBGS','B','TGS','T','SGS','S','NCGS','N','CTM','C','EDGE','E','ALL','%') "+ 
+>                                      " and   SEC_CD like decode(?,'ALL','%',?) "+
+>                                      " and   gr_cd= ? "+
+>                                      " and   MM_VAL=to_char(to_date(?,'Mon'),'MM') "+
+>                                      " and   stn_extn is null ");
+> 
+>        ps1.setString(1,finyr1);
+>        ps1.setString(2,station);
+>        ps1.setString(3,section);
+>        ps1.setString(4,section);
+>        ps1.setString(5,prev_gr_cd);
+>        ps1.setString(6,month);
+>        rs1 = ps1.executeQuery();
+> while(rs1.next()){
+>   tot_mtd_budget_f = rs1.getString(1);
+> }
+> rs1.close();
+> ps1.close();
+> 
+>        ps1 = mk.con.prepareStatement(" select to_char(nvl(sum(amt),0),'9999999990.999') "+
+>                                      " from BGTM_REPO_STRUC_SPL "+
+>                                      " where BGT_FROM=? "+ 
+>                                      " and   bgt_mkr='A' "+
+>                                      " and   BILL_REL_RECV=? "+
+>                                      " and   STN_CD like decode(?,'BBGS','B','TGS','T','SGS','S','NCGS','N','CTM','C','EDGE','E','ALL','%') "+ 
+>                                      " and   SEC_CD like decode(?,'ALL','%',?) "+
+>                                      " and   gr_cd=? "+
+>                                      " and   MM_VAL=to_char(to_date(?,'Mon'),'MM') "+
+>                                      " and   stn_extn is null ");
+>        ps1.setString(1,finyr1);
+>        ps1.setString(2,mon_basis);
+>        ps1.setString(3,station);
+>        ps1.setString(4,section);
+>        ps1.setString(5,section);
+>        ps1.setString(6,prev_gr_cd);
+>        ps1.setString(7,month);
+>        rs1 = ps1.executeQuery();
+> while(rs1.next()){
+>   tot_mtd_exp_act = rs1.getString(1);
+> }
+> rs1.close();
+> ps1.close();
+> 
+> 
+>        ps1 = mk.con.prepareStatement(" select to_char(nvl(sum(amt),0),'9999999990.999')  from BGTM_REPO_STRUC_SPL "+ 
+>                                      " where BGT_FROM = ? "+ 
+>                                      " and   bgt_mkr='B' "+ 
+>                                      " and   target_floor ='T' "+
+>                                      " and   STN_CD like decode(?,'BBGS','B','TGS','T','SGS','S','NCGS','N','CTM','C','EDGE','E','ALL','%') "+ 
+>                                      " and   SEC_CD like decode(?,'ALL','%',?) "+ 
+>                                      " and   gr_cd= ? "+
+>                                      " and   to_date(MM_VAL||YY_VAL,'mmyy') between to_date('04'||substr(?,3,2),'MMYY') and to_date(to_char(to_date(?,'Mon'),'MM')||decode(?,'Apr',substr(?,3,2),'May',substr(?,3,2),'Jun',substr(?,3,2),'Jul',substr(?,3,2),'Aug',substr(?,3,2),'Sep',substr(?,3,2),'Oct',substr(?,3,2),'Nov',substr(?,3,2),'Dec',substr(?,3,2),'Jan',to_char(add_months(to_date(?,'YYYY'),12),'YY'),'Feb',to_char(add_months(to_date(?,'YYYY'),12),'YY'),'Mar',to_char(add_months(to_date(?,'YYYY'),12),'YY')),'MMYY') "+
+>                                      " and   stn_extn is null ");
+>        ps1.setString(1,finyr1);
+>        ps1.setString(2,station);
+>        ps1.setString(3,section);
+>        ps1.setString(4,section);
+>        ps1.setString(5,prev_gr_cd);
+>        ps1.setString(6,finyr1);
+>        ps1.setString(7,month);
+>        ps1.setString(8,month);
+>        ps1.setString(9,finyr1);
+>        ps1.setString(10,finyr1);
+>        ps1.setString(11,finyr1);
+>        ps1.setString(12,finyr1);
+>        ps1.setString(13,finyr1);
+>        ps1.setString(14,finyr1);
+> 
+> 

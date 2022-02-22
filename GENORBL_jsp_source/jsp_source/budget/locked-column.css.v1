@@ -1,0 +1,39 @@
+div#tbl-container {
+width: 600px;
+height: 400px;
+overflow: auto;
+scrollbar-base-color:#ffeaff;
+}
+
+table {
+table-layout: fixed;
+border-collapse: collapse;
+}
+
+div#tbl-container table th {
+width: 100px; 
+}
+
+thead th, thead th.locked	{
+text-align: center;
+background-color: navy;
+color: white;
+position:relative;
+}
+	
+thead th {
+ top: expression(document.getElementById("tbl-container").scrollTop-2);  
+z-index: 20;
+}
+
+thead th.locked {z-index: 30;}
+
+td.locked,  th.locked{
+background-color: #ffeaff;
+/*font-weight: bold; */
+ border-right: 1px solid silver; 
+left: expression(parentNode.parentNode.parentNode.parentNode.scrollLeft); /* IE5+ only */
+position: relative;
+z-index: 10;
+}
+

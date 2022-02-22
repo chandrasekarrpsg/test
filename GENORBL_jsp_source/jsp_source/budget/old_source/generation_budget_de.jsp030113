@@ -1,0 +1,630 @@
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page language="java" %>
+<%@ page import="java.io.*,javax.servlet.jsp.*,javax.ejb.EJB,javax.naming.*,java.util.*,java.lang.*" %>
+<%@ page import="java.util.*" %>
+<%@ page import="java.sql.*" %>
+<%@ page import="javax.sql.*" %>
+<%@ page import="oracle.sql.*" %>
+<%@ page import="oracle.jdbc.*" %>
+<%@ page import="genOrblJavaPackage.*" %>
+
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Budget</title>
+<script type="text/javascript" src="gen_check.js"></script>
+<style type="text/css">
+
+   .style1 {
+	border-collapse: collapse;
+	font-family: Arial;
+	font-size: x-small;
+   }
+   .style2 {
+        border: 1px solid #000000;
+	font-family: Calibri;
+	font-size: x-small;
+   }
+   .style3 {
+	text-align: center;
+	color: #FFFFFF;
+	font-size: small;
+	border-width: 0;
+	background-color: #002851;
+   }
+   .style4 {
+	text-align: center;
+	border-width: 0;
+	background-color: #F0D8B3;
+   }
+   .style5 {
+	font-size: small;
+   }
+   .style6 {
+	border-width: 0;
+	text-align: center;
+   }
+   .style7 {
+	color: #C53121;
+   }
+   .style9 {
+	font-family: Arial;
+	font-size: small;
+   }
+   .style10 {
+	text-align: center;
+	font-size: x-small;
+	background-color: #D8D8B1;
+	font-family: Calibri;
+        border: 1px solid #000000;
+
+   }
+   .style11 {
+	text-align: left;
+	font-size: x-small;
+	background-color: #D8D8B1;
+	font-family: Calibri;
+        border: 1px solid #000000;
+   }
+   .style12 {
+	text-align: right;
+	font-size: x-small;
+	background-color: #D8D8B1;
+	font-family: Calibri;
+        border: 1px solid #000000;
+   }
+   .style16 {
+	border-width: 0;
+	background-color: #D8D8B1;
+	text-align: right;
+	font-size: x-small;
+   }
+   .style19 {
+	font-family: Calibri;
+   }
+   .style21 {
+	border-width: 0;
+	text-align: center;
+	font-size: x-small;
+	background-color: #D8D8B1;
+	font-family: Calibri;
+   }
+   .style22 {
+        border: 0px solid #000000;
+	font-family: Calibri;
+	font-size: x-small;
+   }
+
+   .text_box1 {
+
+    background-color:transparent;
+    font-family:Calibri;
+    font-size:xx-small;
+    text-align:center;
+    border:0px;
+   
+   }
+
+
+</style>
+
+<script type="text/javascript">
+
+function printSpecial() {
+     var gAutoPrint = true;
+     if (document.getElementById != null)
+     {
+     var html = '<HTML>\n<HEAD>\n';
+
+     if (document.getElementsByTagName != null)
+     {
+          var headTags = document.getElementsByTagName("head");
+          if (headTags.length > 0)
+                html += headTags[0].innerHTML;
+          }
+
+          html += '\n</HEAD>\n<BODY>\n';
+
+          var printReadyElem = document.getElementById("printReady");
+
+          if (printReadyElem != null)
+          {
+/*The above code is customized,changed according to need */
+
+               html += printReadyElem.innerHTML;
+          }
+          else
+          {
+               alert("Could not find the printReady function");
+               return;}
+
+               html += '\n</BODY>\n</HTML>';
+
+          var printWin = window.open("","printSpecial");
+          printWin.document.open();
+          printWin.document.write(html);
+          printWin.document.close();
+          if (gAutoPrint)
+                printWin.print();
+          }
+          else
+          {
+               alert("The print ready feature is only available if you are using an browser. Please update your browser.");
+          }
+     }
+
+
+</script>
+</head>
+
+<body>
+
+<form name = "INSERT_UPDATE_RECS" target="I1" action="gen_insert_upd.jsp" method="POST"/>
+ <input type="hidden" id= "insert_string" name = "insert_string" value="I" />
+ <input type="hidden" id= "update_string" name = "update_string" value="U" />
+</form>
+
+<iframe name="I1" id="I1" style="width: 0; height: 0" marginwidth="1" marginheight="1" scrolling="no" border="0" frameborder="0">
+</iframe>
+
+<%
+
+  PreparedStatement ps1=null;
+  ResultSet rs1=null;
+  PreparedStatement ps2=null;
+  ResultSet rs2=null;
+  MakeConnectionGENORBL mk = null;
+
+  String sBgt_Fr_Year =  new String("");
+  String sBgt_Fr_YY =  new String("");
+  String sBgt_To_Year =  new String("");
+  String sBgt_To_YY =  new String("");
+  String sSl_No_row_val =  new String("");
+  String sSl_No_row_span =  new String("");
+  String sBgt_Hd_Rowval =  new String("");
+  String sBgt_Desc =  new String("");
+  String sSubt_Mkr =  new String("");
+  String sTr_Bg_Color   = new String("");
+  String sBgt_seq       = new String("");
+  String sAmt_NA_mkr    = new String("");
+  String sStrt_Bgt_seq_for_grp    = new String("");
+  String sEnd_Bgt_seq_for_grp     = new String("");
+  String sCell_Id_for_exstngVal   = new String("");
+  int iGrp_sl_no = 0; 
+  int iLineNo = 0; 
+  int iGrp_index = 0; 
+  int i_g_y_cell_index = 0; 
+
+  try{
+
+     mk = new MakeConnectionGENORBL();
+     mk.con.setAutoCommit(false);
+
+     System.out.println("generation_budget_de.jsp opened");
+
+     sBgt_Fr_Year = request.getParameter("T1");
+     sBgt_To_Year = Integer.toString((Integer.parseInt(sBgt_Fr_Year))+1); 
+
+     sBgt_Fr_YY = sBgt_Fr_Year.substring(2);
+     sBgt_To_YY = sBgt_To_Year.substring(2);
+
+%>
+
+<table style="width: 100%" class="style1">
+	<tr>
+		<td class="style3" colspan="19"><strong>Cash Flow Statement : <%= sBgt_Fr_Year %> - <%= sBgt_To_Year %></strong></td>
+	</tr>
+	<tr>
+		<td class="style4" colspan="19"><strong><span class="style5">Budge Budge Generating Station</span> </strong></td>
+	</tr>
+	<tr>
+		<td class="style6"><strong><span class="style7">Form 2B</span></strong></td>
+		<td style="width: 5%" class="style22">&nbsp;</td>
+		<td style="width: 5%" class="style22">&nbsp;</td>
+		<td style="width: 5%" class="style22">&nbsp;</td>
+		<td style="width: 5%" class="style22">&nbsp;</td>
+		<td style="width: 5%" class="style22">&nbsp;</td>
+		<td style="width: 5%" class="style22">&nbsp;</td>
+		<td style="width: 5%" class="style22">&nbsp;</td>
+		<td style="width: 5%" class="style22">&nbsp;</td>
+		<td style="width: 5%" class="style22">&nbsp;</td>
+		<td style="width: 5%" class="style22">&nbsp;</td>
+		<td style="width: 5%" class="style22">&nbsp;</td>
+		<td style="width: 5%" class="style22">&nbsp;</td>
+		<td style="width: 5%" class="style22">&nbsp;</td>
+		<td style="width: 5%" class="style22">&nbsp;</td>
+		<td style="width: 5%" class="style22">&nbsp;</td>
+		<td style="width: 5%" class="style22">&nbsp;</td>
+		<td style="width: 5%" class="style22">&nbsp;</td>
+		<td style="width: 5%" class="style22">&nbsp;</td>
+	</tr>
+</table>
+
+<table style="width: 120%" cellspacing="0" cellpadding="0" class="style9" align="center">
+	<tr>
+		<td style="width: 4%" class="style10"><strong>Sl No</strong></td>
+		<td style="width: 4%" class="style10"><strong>Budget Head</strong></td>
+		<td class="style11" colspan="10">
+			<strong>BUDGET HEAD DESCRIPTION</strong>
+		</td>
+		<td style="width: 4%" class="style10"><strong>Apr-<br /><%= sBgt_Fr_YY %></strong></td>
+		<td style="width: 4%" class="style10"><strong>May-<br /><%= sBgt_Fr_YY %></strong></td>
+		<td style="width: 4%" class="style10"><strong>Jun-<br /><%= sBgt_Fr_YY %></strong></td>
+		<td style="width: 4%" class="style10"><strong>Jul-<br /><%= sBgt_Fr_YY %></strong></td>
+		<td style="width: 4%" class="style10"><strong>Aug-<br /><%= sBgt_Fr_YY %></strong></td>
+		<td style="width: 4%" class="style10"><strong>Sep-<br /><%= sBgt_Fr_YY %></strong></td>
+		<td style="width: 4%" class="style10"><strong>Oct-<br /><%= sBgt_Fr_YY %></strong></td>
+		<td style="width: 4%" class="style10"><strong>Nov-<br /><%= sBgt_Fr_YY %></strong></td>
+		<td style="width: 4%" class="style10"><strong>Dec-<br /><%= sBgt_Fr_YY %></strong></td>
+		<td style="width: 4%" class="style10"><strong>Jan-<br /><%= sBgt_To_YY %></strong></td>
+		<td style="width: 4%" class="style10"><strong>Feb-<br /><%= sBgt_To_YY %></strong></td>
+		<td style="width: 4%" class="style10"><strong>Mar-<br /><%= sBgt_To_YY %></strong></td>
+		<td style="width: 4%" class="style10"><strong>Annual<br />
+		                                              <%= sBgt_Fr_YY %>-<%= sBgt_To_YY %></strong>
+        </td>
+	</tr>
+	<tr>
+		<td colspan="25" style="width: 100%" class="style2"><strong>&nbsp;</strong></td>
+	</tr>
+	<tr>
+		<td style="width: 4%" class="style2">&nbsp;</td>
+		<td style="width: 4%" class="style2">&nbsp;</td>
+		<td style="width: 4%" class="style2">&nbsp;</td>
+		<td style="width: 4%" class="style2">&nbsp;</td>
+		<td style="width: 4%" class="style2">&nbsp;</td>
+		<td style="width: 4%" class="style2">&nbsp;</td>
+		<td style="width: 4%" class="style2">&nbsp;</td>
+		<td style="width: 4%" class="style2">&nbsp;</td>
+		<td style="width: 4%" class="style2">&nbsp;</td>
+		<td style="width: 4%" class="style2">&nbsp;</td>
+		<td style="width: 4%" class="style2">&nbsp;</td>
+		<td style="width: 4%" class="style2">&nbsp;</td>
+		<td style="width: 4%" class="style2">&nbsp;</td>
+		<td style="width: 4%" class="style2">&nbsp;</td>
+		<td style="width: 4%" class="style2">&nbsp;</td>
+		<td style="width: 4%" class="style2">&nbsp;</td>
+		<td style="width: 4%" class="style2">&nbsp;</td>
+		<td style="width: 4%" class="style2">&nbsp;</td>
+		<td style="width: 4%" class="style2">&nbsp;</td>
+		<td style="width: 4%" class="style2">&nbsp;</td>
+		<td style="width: 4%" class="style2">&nbsp;</td>
+		<td style="width: 4%" class="style2">&nbsp;</td>
+		<td style="width: 4%" class="style2">&nbsp;</td>
+		<td style="width: 4%" class="style2">&nbsp;</td>
+		<td style="width: 4%" class="style2">&nbsp;</td>
+	</tr>
+
+<%
+
+     ps1=mk.con.prepareStatement(" SELECT NVL(sl_no_rowval,3.5) SL_NO_ROWVAL,"+
+                                 "        COUNT(*) ROW_SPAN "+
+                                 " FROM BGT_FORM2B_STRUC "+
+                                 " WHERE BGT_FR_YR = ? "+
+                                 " GROUP BY SL_NO_ROWVAL "+
+                                 " ORDER BY SL_NO_ROWVAL ");
+     ps1.setString(1,sBgt_Fr_Year);
+
+     rs1=ps1.executeQuery();
+
+     while(rs1.next()){
+
+           iGrp_index = iGrp_index + 1;
+
+           sSl_No_row_val = rs1.getString(1); 
+           sSl_No_row_span = Integer.toString(rs1.getInt(2)); 
+
+           sBgt_Hd_Rowval = "";
+           sBgt_Desc      = "";
+           sSubt_Mkr      = "";
+           sTr_Bg_Color   = "";
+           sBgt_seq       = "";
+           sAmt_NA_mkr    = "";
+
+           iGrp_sl_no = 0;
+           sStrt_Bgt_seq_for_grp    = "";
+           sEnd_Bgt_seq_for_grp = "";
+
+%>
+
+<script>
+
+     var grp_seq_array = [];
+     g_grp_seq_array1[<%= iGrp_index %> - 1] = new Array(3);
+
+</script>
+<%
+           
+           ps2 = mk.con.prepareStatement(" SELECT NVL(SL_NO_ROWVAL,3.5) SL_NO_ROWVAL, "+
+                                         "  NVL(BGT_HD_ROWVAL,' '), "+
+                                         " ' <span style='||CHR(34)||'font-weight:lighter;background-color:#'|| "+
+	                                 "    (SELECT COLOR_HEX  "+
+                                         "            FROM BGT_COLOR  "+
+				         "     WHERE COLOR_CD=NVL(DESC1_B_COLOR,1))|| '; color:#'|| "+
+	                                 "    (SELECT COLOR_HEX  "+
+                                    	 "            FROM BGT_COLOR  "+
+				         "     WHERE COLOR_CD=NVL(DESC1_F_COLOR,1))||CHR(34)||'>'||NVL(DESC1,' ')||'</span>'|| "+
+	                                 "  ' <span style='||CHR(34)||'font-weight:lighter;background-color:#'|| "+
+	                                 "    (SELECT COLOR_HEX  "+
+	                                 " 	      FROM BGT_COLOR  "+
+					 "     WHERE COLOR_CD=NVL(DESC2_B_COLOR,1))||'; color:#'|| "+
+	                                 "    (SELECT COLOR_HEX  "+
+                                    	 "            FROM BGT_COLOR  "+
+				         "     WHERE COLOR_CD=NVL(DESC2_F_COLOR,1))||CHR(34)||'>'||NVL(DESC2,' ')||'</span>'|| "+
+	                                 "  ' <span style='||CHR(34)||'font-weight:lighter;background-color:#'|| "+
+	                                 "    (SELECT COLOR_HEX  "+
+                                         "	      FROM BGT_COLOR  "+
+				         "     WHERE COLOR_CD=NVL(DESC3_B_COLOR,1))||'; color:#'|| "+
+	                                 "    (SELECT COLOR_HEX  "+
+                                    	 "            FROM BGT_COLOR  "+
+				         "     WHERE COLOR_CD=NVL(DESC3_F_COLOR,1))||CHR(34)||'>'||NVL(DESC3,' ')||'</span>' Budg_Desc, "+
+                                    	 "  NVL(SUBT_MKR,'NE'),  "+
+                                    	 "  (SELECT COLOR_HEX  "+
+                                         "          FROM BGT_COLOR  "+
+                                         "   WHERE COLOR_CD=NVL(DESC1_B_COLOR,1)) TD_BG_COLOR,  "+
+                                         "   BGT_SEQ,  "+
+                                         "   NVL(TRIM(AMT_NA),'NE')  "+
+	                                 "  FROM BGT_FORM2B_STRUC "+
+                                         "  WHERE BGT_FR_YR= ?  "+
+                                         "  AND NVL(SL_NO_ROWVAL,3.5)= ?  "+
+                                         "  ORDER BY SL_NO_ROWVAL,BGT_HD_ROWORDER "); 
+                                          
+
+           ps2.setString(1,sBgt_Fr_Year);
+           ps2.setString(2,sSl_No_row_val);
+
+           rs2=ps2.executeQuery();
+
+           while(rs2.next()){
+                 
+                 iLineNo = iLineNo + 1;
+
+                 iGrp_sl_no = iGrp_sl_no + 1;
+                 sBgt_Hd_Rowval = rs2.getString(2);
+                 sBgt_Desc      = rs2.getString(3);
+                 sSubt_Mkr      = rs2.getString(4);
+                 sTr_Bg_Color   = rs2.getString(5);
+                 sBgt_seq       = rs2.getString(6);
+                 sAmt_NA_mkr    = rs2.getString(7);
+
+                 if(iGrp_sl_no == 1){
+
+                    sStrt_Bgt_seq_for_grp    = sBgt_seq;
+
+%>
+
+<script>
+         g_grp_seq_array1[<%= iGrp_index %> - 1][0] = '<%= iLineNo-1 %>';
+         g_grp_seq_array1[<%= iGrp_index %> - 1][1] = '<%= iLineNo-1 %>';
+</script>
+
+<%
+                 }
+
+                 if(sSubt_Mkr.equals("T1")){
+
+%>
+
+<tr style="background-color:<%= sTr_Bg_Color %>">
+                <td colspan= "12" style="width: 48%" class="style2">&nbsp;<%= sBgt_Desc %></td>
+
+<%
+                 }else{
+
+%>
+
+<tr style="background-color:<%= sTr_Bg_Color %>">
+                <td style="width: 4%" class="style2" align="center">&nbsp;<%= sSl_No_row_val %></td>
+                <td style="width: 4%" class="style2" align="center">&nbsp;<%= sBgt_Hd_Rowval %></td>
+                <td colspan= "10" style="width: 40%" class="style2">&nbsp;<%= sBgt_Desc %></td>
+
+<%
+
+                }
+
+%>
+
+		<td style="width: 4%" class="style2">&nbsp;<input  type= "text" class="text_box1" style="color:blue;" size="4" maxlength="10" value="1234567890" id = "T_<%= sBgt_seq %>_01" onClick="addBgtSeqforUpd('<%= sBgt_seq %>')" onkeyup="if(window.event.keyCode==13||this.length==10){checkCell('<%= iLineNo-1 %>','00','<%= sBgt_seq %>');}" /></td>
+		<td style="width: 4%" class="style2">&nbsp;<input  type= "text" class="text_box1" style="color:blue;" size="4" maxlength="10" value="1234567890" id = "T_<%= sBgt_seq %>_02"  onClick="alert(this.id)"  /> </td>
+		<td style="width: 4%" class="style2">&nbsp;<input  type= "text" class="text_box1" style="color:blue;" size="4" maxlength="10" value="1234567890" id = "T_<%= sBgt_seq %>_03"  onClick="alert(this.id)"  /> </td>
+		<td style="width: 4%" class="style2">&nbsp;<input  type= "text" class="text_box1" style="color:blue;" size="4" maxlength="10" value="1234567890" id = "T_<%= sBgt_seq %>_04"  onClick="alert(this.id)"  /> </td>
+		<td style="width: 4%" class="style2">&nbsp;<input  type= "text" class="text_box1" style="color:blue;" size="4" maxlength="10" value="1234567890" id = "T_<%= sBgt_seq %>_05"  onClick="alert(this.id)"  /> </td>
+		<td style="width: 4%" class="style2">&nbsp;<input  type= "text" class="text_box1" style="color:blue;" size="4" maxlength="10" value="1234567890" id = "T_<%= sBgt_seq %>_06"  onClick="alert(this.id)"  /> </td>
+		<td style="width: 4%" class="style2">&nbsp;<input  type= "text" class="text_box1" style="color:blue;" size="4" maxlength="10" value="1234567890" id = "T_<%= sBgt_seq %>_07"  onClick="alert(this.id)"  /> </td>
+		<td style="width: 4%" class="style2">&nbsp;<input  type= "text" class="text_box1" style="color:blue;" size="4" maxlength="10" value="1234567890" id = "T_<%= sBgt_seq %>_08"  onClick="alert(this.id)"  /> </td>
+		<td style="width: 4%" class="style2">&nbsp;<input  type= "text" class="text_box1" style="color:blue;" size="4" maxlength="10" value="1234567890" id = "T_<%= sBgt_seq %>_09"  onClick="alert(this.id)"  /> </td>
+		<td style="width: 4%" class="style2">&nbsp;<input  type= "text" class="text_box1" style="color:blue;" size="4" maxlength="10" value="1234567890" id = "T_<%= sBgt_seq %>_10"  onClick="alert(this.id)"  /> </td>
+		<td style="width: 4%" class="style2">&nbsp;<input  type= "text" class="text_box1" style="color:blue;" size="4" maxlength="10" value="1234567890" id = "T_<%= sBgt_seq %>_11"  onClick="alert(this.id)"  /> </td>
+		<td style="width: 4%" class="style2">&nbsp;<input  type= "text" class="text_box1" style="color:blue;" size="4" maxlength="10" value="1234567890" id = "T_<%= sBgt_seq %>_12"  onClick="alert(this.id)"  /> </td>
+		<td style="width: 4%" class="style2">&nbsp;<input  type= "text" class="text_box1" style="color:blue;" size="4" maxlength="10" value="1234567890" id = "T_<%= sBgt_seq %>_13"  onClick="alert(this.id)"  /> </td>
+	</tr>
+
+
+<script>
+
+     g_all_cell_id_array[<%= iLineNo %> - 1] = new Array(g_mnths_tot_col.length+1);
+   
+     for(var k = 0; k < g_mnths_tot_col.length ; k++){
+
+         g_all_cell_id_array[<%= iLineNo %> - 1][k] = 'T_<%= sBgt_seq %>_'+g_mnths_tot_col[k];
+
+     }
+
+     g_all_cell_id_array[<%= iLineNo %> - 1][g_mnths_tot_col.length] = '<%= iGrp_index-1 %>'; 
+
+     //alert(g_all_cell_id_array[<%= iLineNo %> - 1][0]);
+
+   
+
+</script>
+<%
+                 if(sAmt_NA_mkr.equals("NE")){
+
+                    sEnd_Bgt_seq_for_grp    = sBgt_seq;
+%>
+<script>
+
+      g_grp_seq_array1[<%= iGrp_index %> - 1][1] = '<%= iLineNo-1 %>';
+
+      grp_seq_array.push('<%= sBgt_seq %>') ;
+
+      summationAnnual('T_<%= sBgt_seq %>_13','<%= sBgt_seq %>');
+
+      g_ne_cell_id_array[<%= iLineNo %> - 1] = new Array(g_mnths_tot_col.length+1);
+
+      for(var k = 0; k < g_mnths_tot_col.length ; k++){
+
+         g_ne_cell_id_array[<%= iLineNo %> - 1][k] = 'T_<%= sBgt_seq %>_'+g_mnths_tot_col[k];
+
+      }
+
+      g_ne_cell_id_array[<%= iLineNo %> - 1][g_mnths_tot_col.length] = '<%= iGrp_index-1 %>'; 
+
+</script>
+<%
+
+                }
+
+                if(sAmt_NA_mkr.equals("Y")){
+
+                   i_g_y_cell_index = i_g_y_cell_index + 1;
+%>
+
+<script>
+
+      g_y_cell_id_array[<%= i_g_y_cell_index -1 %>] = new Array(g_mnths_tot_col.length+1);
+
+      for(var k = 0; k < g_mnths_tot_col.length ; k++){
+
+         g_y_cell_id_array[<%= i_g_y_cell_index -1 %>][k] = 'T_<%= sBgt_seq %>_'+g_mnths_tot_col[k];
+ 
+         document.getElementById('T_<%= sBgt_seq %>_'+g_mnths_tot_col[k]).value = '0.00';
+         document.getElementById('T_<%= sBgt_seq %>_'+g_mnths_tot_col[k]).readOnly = true;
+         
+      }
+
+      g_y_cell_id_array[<%= i_g_y_cell_index -1 %>][g_mnths_tot_col.length] = '<%= iGrp_index-1 %>'; 
+
+
+</script>
+
+
+<%
+
+                }
+
+                if(sAmt_NA_mkr.equals("S")){
+
+%>
+
+<script>
+                   g_grp_seq_array1[<%= iGrp_index %> - 1][2] = <%= iLineNo %> - 1;
+
+                   summationOfCellVal('<%= sBgt_seq %>',grp_seq_array);
+
+</script>
+
+<%
+                }
+
+
+           }
+
+           rs2.close();
+           ps2.close();
+
+           rs2 = null;
+           ps2 = null;
+
+     } 
+     rs1.close();
+     ps1.close();
+
+     ps1=null;
+     rs1=null; 
+
+     ps1=mk.con.prepareStatement(" SELECT "+ 
+                                 "      BGT_SEQ,"+
+	                         "      BGT_VER,"+
+	                         "      LPAD(MM_ORDER,2,'0') MM_ORDER,"+
+                                 "      TO_CHAR(NVL(AMT,0),'9999990.99999') AMT"+
+                                 " FROM BGT_FORM2B_DATA"+
+                                 " WHERE BGT_YR= ? "+
+                                 " AND STN_CD='N'"+
+                                 " ORDER BY BGT_SEQ,"+
+                                 " YY_VAL,"+
+	                  	 " MM_VAL "); 
+     ps1.setString(1,sBgt_Fr_Year);
+
+     rs1=ps1.executeQuery();
+
+     while(rs1.next()){
+
+           sCell_Id_for_exstngVal = "";
+           sCell_Id_for_exstngVal   = "T_"+rs1.getString(1)+"_"+rs1.getString(3) ;
+
+%>
+<script>
+
+           //alert("Id"+'<%= sCell_Id_for_exstngVal %>');
+           //popl_exstngVal_inCells('<%= sCell_Id_for_exstngVal %>','<%= rs1.getString(4) %>');
+
+</script>
+<%           
+
+     }
+
+     rs1.close();
+     ps1.close();
+     
+     ps1=null;
+     rs1=null;
+
+%>
+<script>
+
+   //putZeroInYFields();
+   putNullInYFields();
+
+</script>
+
+   </table>
+
+<table style="width: 100%" class="style1">
+	<tr>
+		<td class="style3" colspan="20" width="100%"><input type="button" name="B1" value="Submit" onClick="chkBefSubmit()"/></td>
+	</tr>
+</table>
+<%
+
+  }catch(Exception e1){
+         System.out.println(e1);      
+         e1.printStackTrace();
+  }
+  finally{
+
+     if(rs1!=null){
+        rs1.close();
+     }
+     if(ps1!=null){
+        ps1.close();
+     }
+     if(rs2!=null){
+        rs2.close();
+     }
+     if(ps2!=null){
+        ps2.close();
+     }
+     if(mk!=null){
+        mk.con.close();
+     }
+
+     System.out.println("generation_budget_de.jsp closed");
+  
+}
+%>
+
+</body>
+
+</html>

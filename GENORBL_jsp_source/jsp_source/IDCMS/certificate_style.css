@@ -1,0 +1,44 @@
+/* 
+    Document   : certificate_style
+    Created on : Jun 18, 2013, 3:41:31 PM
+    Author     : sibashis_chatterjee
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+root { 
+    display: block;
+}
+.bg {
+    width: 29.7cm;
+    height: 21cm;
+    text-align: center;
+    background-image: url(cert-bg.jpg);
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+.head {
+    font-family: "Old English Text MT";
+}
+.body {
+    font-family: "Monotype Corsiva";
+    font-size: 18pt;
+}
+.hl {
+    background: yellow;
+    font-weight: bold;
+}
+.footer {
+    font-family: "Monotype Corsiva";
+    font-weight: bold;
+    font-size: 30pt;
+}
+table {
+    width: 100%;
+    text-align: center;
+}

@@ -1,0 +1,135 @@
+                //--------------------------Block D---------------------------------------//
+
+                var json_arr = JSON.parse(f1.sJson_probable_soln.value);
+                //alert(json_arr.length)
+                var id = 0 ;
+                $.each(json_arr,function(key,value){
+                    id = add_row_probable_soln();//alert(value.sItem + '-' + value.sImprove_param + '-' + value.sUom + '-' + value.sBefore + '-' + value.sAfter);
+                    $('#tr_probable_soln_'+id).children().eq(0).children('input').val(value.sProbable_soln);
+                    if( id == f1.sFinally_implemented_soln.value ){
+                        $('#tr_probable_soln_'+id).children().eq(1).children('input').attr('checked',true);
+                        clkFinally_implemented_soln($('#tr_probable_soln_'+id).children().eq(1).children('input'));
+                    }
+                    //alert(json[key].fname + ' ' + json[key].lname);
+                    //alert(value.fname + ' ' + value.lname);
+                    /*$('#sBudget_head_seq').append($('<option>', {
+                                value: value.budget_head_seq,
+                                text: value.budget_head
+                            }));*/
+                });
+
+                if( f1.hValidate_thru_experiment.value == 'Y' ){
+                    $('input[name="sValidate_thru_experiment"]')[0].checked = true ;
+                }
+                if( f1.hEasier_to_implement.value == 'Y' ){
+                    $('input[name="sEasier_to_implement"]')[0].checked = true ;
+                }
+                if( f1.hLow_cost.value == 'Y' ){
+                    $('input[name="sLow_cost"]')[0].checked = true ;
+                }
+                if( f1.hMin_conflict_oth_interest.value == 'Y' ){
+                    $('input[name="sMin_conflict_oth_interest"]')[0].checked = true ;
+                }
+                if( f1.hFavour_impact_ehs.value == 'Y' ){
+                    $('input[name="sFavour_impact_ehs"]')[0].checked = true ;
+                }
+                if( f1.hOther_soln.value == 'Y' ){
+                    $('input[name="sOther_soln"]')[0].checked = true ;
+                    clkOther_soln();
+                }
+                if( f1.hInnovative_place_work.value == 'Y' ){
+                    $('input[name="sInnovative_place_work"]')[0].checked = true ;
+                }else if( f1.hInnovative_place_work.value == 'N' ){
+                    $('input[name="sInnovative_place_work"]')[1].checked = true ;
+                }
+                if( f1.hInnovative_place_dept.value == 'Y' ){
+                    $('input[name="sInnovative_place_dept"]')[0].checked = true ;
+                }else if( f1.hInnovative_place_dept.value == 'N' ){
+                    $('input[name="sInnovative_place_dept"]')[1].checked = true ;
+                }
+                if( f1.hInnovative_place_cesc.value == 'Y' ){
+                    $('input[name="sInnovative_place_cesc"]')[0].checked = true ;
+                    attach_innovative_place_cesc();
+                }
+                if( f1.hInnovative_none.value == 'Y' ){
+                    $('input[name="sInnovative_none"]')[0].checked = true ;
+                }
+                if( f1.hReplicated_from_cesc.value == 'Y' ){
+                    $('input[name="sReplicated_from_cesc"]')[0].checked = true ;
+                    $('#spanUniqueness_1').after('<span id="spanUniqueness_2">mention source&nbsp;<span style="color : red ; font-size : 12pt"><b>*</b></span> <input type="text" name="sUniqueness_remarks" id="sUniqueness_remarks"></span>');
+                    $('#sUniqueness_remarks').val($('#hUniqueness_remarks').val());
+                }else if( f1.hReplicated_from_cesc.value == 'N' ){
+                    $('input[name="sReplicated_from_cesc"]')[1].checked = true ;
+                }
+                if( f1.hReplicated_from_oth_industry.value == 'Y' ){
+                    $('input[name="sReplicated_from_oth_industry"]')[0].checked = true ;
+                    $('#spanUniqueness_1').after('<span id="spanUniqueness_2">mention source&nbsp;<span style="color : red ; font-size : 12pt"><b>*</b></span> <input type="text" name="sUniqueness_remarks" id="sUniqueness_remarks"></span>');
+                    $('#sUniqueness_remarks').val($('#hUniqueness_remarks').val());
+                }else if( f1.hReplicated_from_oth_industry.value == 'N' ){
+                    $('input[name="sReplicated_from_oth_industry"]')[1].checked = true ;
+                }
+                if( f1.hCompletely_unique.value == 'Y' ){
+                    $('input[name="sCompletely_unique"]')[0].checked = true ;
+                    $('#spanUniqueness_1').after('<span id="spanUniqueness_2">mention the uniqueness part <input type="text" name="sUniqueness_remarks" id="sUniqueness_remarks"></span>');
+                    $('#sUniqueness_remarks').val($('#hUniqueness_remarks').val());
+                }else if( f1.hCompletely_unique.value == 'N' ){
+                    $('input[name="sCompletely_unique"]')[1].checked = true ;
+                }
+
+                if( f1.hReplication_in_dept.value == 'Y' ){
+                    $('input[name="sReplication_in_dept"]')[0].checked = true ;
+                }else if( f1.hReplication_in_dept.value == 'N' ){
+                    $('input[name="sReplication_in_dept"]')[1].checked = true ;
+                }
+
+                if( f1.hReplication_in_oth_cesc.value == 'Y' ){
+                    $('input[name="sReplication_in_oth_cesc"]')[0].checked = true ;
+                }else if( f1.hReplication_in_oth_cesc.value == 'N' ){
+                    $('input[name="sReplication_in_oth_cesc"]')[1].checked = true ;
+                }
+
+                if( f1.hReplication_in_industry.value == 'Y' ){
+                    $('input[name="sReplication_in_industry"]')[0].checked = true ;
+                }else if( f1.hReplication_in_industry.value == 'N' ){
+                    $('input[name="sReplication_in_industry"]')[1].checked = true ;
+                }
+                //--------------------------END Block D---------------------------------------//
+                
+                //--------------------------Block E---------------------------------------//
+
+                var json_arr = JSON.parse(f1.sJson_prfmnce_get.value);
+                //alert(json_arr.length)
+                var id = 0 ;
+                $.each(json_arr,function(key,value){
+                    id = add_row_prfmnce();//alert(value.sItem + '-' + value.sImprove_param + '-' + value.sUom + '-' + value.sBefore + '-' + value.sAfter);
+                    $('#tr_prfmnce_'+id).children().eq(0).children('select').val(value.sItem);
+                    $('#tr_prfmnce_'+id).children().eq(1).children('input').val(value.sImprove_param);
+                    $('#tr_prfmnce_'+id).children().eq(2).children('input').val(value.sUom);
+                    $('#tr_prfmnce_'+id).children().eq(3).children('input').val(value.sBefore);
+                    $('#tr_prfmnce_'+id).children().eq(4).children('input').val(value.sAfter);
+                    //alert(json[key].fname + ' ' + json[key].lname);
+                    //alert(value.fname + ' ' + value.lname);
+                    /*$('#sBudget_head_seq').append($('<option>', {
+                                value: value.budget_head_seq,
+                                text: value.budget_head
+                            }));*/
+                });
+
+                if( f1.hBenefit_of_improve_continue.value == 'Y' ){
+                    $('input[name="sBenefit_of_improve_continue"]')[0].checked = true ;
+                    clkBenefit_of_improve_continue();
+                }else if( f1.hBenefit_of_improve_continue.value == 'N' ){
+                    $('input[name="sBenefit_of_improve_continue"]')[1].checked = true ;
+                    clkBenefit_of_improve_continue();
+                }
+
+                //--------------------------END Block E---------------------------------------//
+
+                //--------------------------Block F---------------------------------------//
+
+                $('#sTitle').characterCountdown({
+                    countdownTarget: '#div_countdown_title', // the class, ID or element that will display the countdown
+                    maxChars: 135 //  the maximum amount of characters
+                });
+
+                //--------------------------END Block F---------------------------------------//

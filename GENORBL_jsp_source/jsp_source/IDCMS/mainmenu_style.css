@@ -1,0 +1,80 @@
+/* 
+    Document   : mainmenu
+    Created on : May 18, 2013, 12:04:16 PM
+    Author     : sibashis_chatterjee
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+root { 
+    display: block;
+}
+
+.header {
+    text-align: center;
+    width: 100%;
+}
+.hd1 {
+    width: 60%;
+    height: 100px;
+    text-align: center;
+    vertical-align: middle;
+}
+.logo {
+    width: 10%;
+    height: 100px;
+    text-align: center;
+    vertical-align: bottom;
+}
+.padding {
+    width: 10%;
+}
+.logo_img {
+    width: 100%;
+    height: 50px;
+}
+.title_img {
+    width: 80%;
+    height: 100px;
+}
+.legend_txt {
+    font-family: "comic Sans MS";
+    color: black;
+}
+.menubar {
+    vertical-align: top;
+    height: auto;
+    width: 20%;
+}
+.framebar {
+    vertical-align: middle;
+    height: 600px;
+    width: 600px;
+}
+.field_frame {
+    height: 100%;
+    width: 97%;
+}
+.field_menu {
+    height: 100%;
+    width: 90%;
+}
+.bg {
+    width: 100%;
+    height: 100%;
+    background-image: url("bg.jpg");
+    background-position: 0% 0%;
+    background-repeat: no-repeat;
+    padding: 0;
+    position: absolute;
+}
+.welcome_txt {
+    color: black;
+    font-family: "bookman old style";
+    text-align: left;
+}

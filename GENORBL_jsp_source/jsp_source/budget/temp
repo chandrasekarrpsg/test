@@ -1,0 +1,38 @@
+   obj.value=trimText(obj.value);
+
+   if(obj.value.length==0){
+
+      obj.value = "0.00";
+   }
+
+   for(i=0;i<obj.value.length;i++){
+     
+       if(obj.value.charAt(i)=='.'){
+       
+          decPos=i;
+          decCnt++;         
+       }
+    
+   }
+      
+   if(decCnt>1){
+      
+      alert("Decimal Point Can Occur AtMost Once!!");
+      obj.focus();
+      obj.select();
+      return false;
+      
+   }
+      
+   if(decPos==-1){
+     
+      var valBefDec = obj.value.substring(0);
+      var valAftDec = "00";
+
+      
+   }else{
+      
+      var valBefDec = obj.value.substring(0,decPos);
+      var valAftDec = obj.value.substring(decPos+1);
+      
+   }

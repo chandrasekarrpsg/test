@@ -1,0 +1,29 @@
+/* 
+    Document   : view_nom_style
+    Created on : May 20, 2013, 12:24:55 PM
+    Author     : sibashis_chatterjee
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+root { 
+    display: block;
+}
+.bg {
+    background-color: aqua;
+    color: white;
+    text-align: center;
+    background-image: url(hist-bg.jpg);
+    background-repeat: no-repeat;
+    background-position: top;
+}
+#searchresult {
+    color: white;
+    
+}
+

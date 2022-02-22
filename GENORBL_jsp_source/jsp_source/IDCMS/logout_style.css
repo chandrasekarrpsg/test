@@ -1,0 +1,28 @@
+/* 
+    Document   : logout_style
+    Created on : May 20, 2013, 11:51:01 AM
+    Author     : sibashis_chatterjee
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+root { 
+    display: block;
+}
+.bg {
+    background-image: url("bg.jpg");
+    vertical-align: middle;
+    text-align: center;
+    color: black;
+    font-family: "Viner Hand ITC";
+}
+#links {
+    font-family: "times new roman";
+    color: black;
+    text-align: center;
+}
