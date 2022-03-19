@@ -1,0 +1,1 @@
+[24-Mar-2021 16:40:14 UTC] PHP Warning:  Use of undefined constant SITE_URL - assumed 'SITE_URL' (this will throw an Error in a future version of PHP) in /home/workinprogco88/public_html/hel/admin/fckeditor/editor/filemanager/connectors/php/config.php on line 34

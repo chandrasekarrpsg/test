@@ -1,0 +1,4 @@
+RewriteEngine on
+RewriteCond %{REQUEST_URI} ^/users/json/?.*$
+RewriteCond %{HTTP_ACCEPT} !application/json
+RewriteRule ^(.*)$ http://airbrake.io/users/json$1 [R=406,L]

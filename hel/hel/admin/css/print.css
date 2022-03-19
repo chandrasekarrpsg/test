@@ -1,0 +1,39 @@
+@media screen, print
+{
+* { -webkit-print-color-adjust: exact !important;   /* Chrome, Safari */ color-adjust: exact !important;  /*Firefox*/}	
+	
+body{ margin:0px; padding:0px; color:#000; font:normal 12px/18px Arial, Helvetica, sans-serif; background:#fff !important;     }
+@page { size: auto;   /* auto is the initial value */ margin: 0;  /* this affects the margin in the printer settings */}
+title{ display:none !important; }
+	
+.top_nav, .page-title, .prt_ico{ display: none !important;}	
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th{ border: 2px solid #ccc !important;}
+.table{ border: 2px solid #ccc;}
+.btn{ display: none !important;}
+.form-group{ border-bottom: 2px solid #ccc !important;}
+
+
+.col-md-3, .col-md-6{ width: 200px;}
+.form-horizontal .control-label {
+    padding-top: 0;
+}
+.form-group:first-child .control-label{ display: none;}
+
+.x_title{ display: none;}
+.form-group img{ margin-bottom: 20px;}
+footer{ display: none;}
+.form-label-left{ padding:30px 30px 30px 45px;}
+.form-horizontal .control-label{ padding: 0px !important;}
+
+h2{ padding: 0px !important;}
+
+.page { 
+page-break-before:always;
+}
+	
+	
+}	
+	
+	
+
+	
